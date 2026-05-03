@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="images/Admin-icon.jpg" id="favicon"> 
+  <title>Admin Dashboard | IAL Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css"/>
+  <link rel="stylesheet" href="css/admin-sidebar.css"/>
+  <link rel="stylesheet" href="css/admin-icons.css"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    if (localStorage.getItem('adminLoggedIn') !== 'true') {
+      location.replace('admin-login.html');
+    }
+  </script>
+  <style>
+    /* Professional Dashboard Styles */
+    :root {
+      --primary-dark: #0A2540;
+      --primary: #1A3A5F;
+      --primary-light: #2C5F8A;
+      --accent: #2D5BE3;
+      --accent-light: #4B76E8;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Dashboard specific styles */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--primary-light));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--accent-light);
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--accent-lt), #E8EEFF);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+
+    .stat-value {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .modules-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-title i {
+      color: var(--accent);
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--primary-light));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .module-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .module-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--accent-light);
+    }
+
+    .module-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .module-card:hover .module-icon {
+      transform: scale(1.05);
+    }
+
+    .module-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .module-description {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .module-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.3s ease;
+    }
+
+    .module-card:hover .module-link {
+      gap: 10px;
+    }
+
+    .activity-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-item:hover {
+      background: var(--bg);
+      transform: translateX(4px);
+    }
+
+    .activity-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent-lt), #E8EEFF);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-title {
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    .activity-time {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Connection Status */
+    .status-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--success);
+      color: white;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-dot i {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Topbar enhancements */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+    }
+
+    .topbar-heading h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .topbar-heading p {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .modules-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .modules-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .stat-card, .module-card {
+        padding: 20px;
+      }
+      .activity-item {
+        padding: 14px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app-shell" class="app app-hidden">
+  <div id="admin-sidebar-root"></div>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-heading">
+          <span class="topbar-icon" aria-hidden="true">
+            <i data-lucide="layout-dashboard"></i>
+          </span>
+          <div>
+            <h2 id="page-title">Dashboard</h2>
+            <p id="page-sub">Overview &amp; quick actions</p>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="connection-status" class="status-dot">
+          <i data-lucide="wifi"></i> Connected
+        </span>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <!-- Stats Grid -->
+      <div class="stats-grid" id="stats-container">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon"><i data-lucide="building-2"></i></div>
+          </div>
+          <div class="stat-value" id="org-status">—</div>
+          <div class="stat-label">Organization Profile</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon"><i data-lucide="users"></i></div>
+          </div>
+          <div class="stat-value" id="team-count">0</div>
+          <div class="stat-label">Team Members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon"><i data-lucide="handshake"></i></div>
+          </div>
+          <div class="stat-value" id="collab-count">0</div>
+          <div class="stat-label">Collaborations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon"><i data-lucide="calendar"></i></div>
+          </div>
+          <div class="stat-value" id="last-updated">—</div>
+          <div class="stat-label">Last Update</div>
+        </div>
+      </div>
+
+      <!-- Management Modules -->
+      <div class="modules-section">
+        <h2 class="section-title">
+          <i data-lucide="grid"></i>
+          Management Modules
+        </h2>
+        <div class="modules-grid">
+          <a href="admin-organization.html" class="module-card">
+            <div class="module-icon"><i data-lucide="building-2"></i></div>
+            <h3 class="module-title">Organization Profile</h3>
+            <p class="module-description">Manage institution name, logo, mission, vision, and contact information.</p>
+            <span class="module-link">Edit Profile <i data-lucide="arrow-right"></i></span>
+          </a>
+          <a href="admin-team.html" class="module-card">
+            <div class="module-icon"><i data-lucide="users"></i></div>
+            <h3 class="module-title">Team Members</h3>
+            <p class="module-description">Add, edit, and remove team members. Manage photos, positions, and bios.</p>
+            <span class="module-link">Manage Team <i data-lucide="arrow-right"></i></span>
+          </a>
+          <a href="admin-collaborations.html" class="module-card">
+            <div class="module-icon"><i data-lucide="handshake"></i></div>
+            <h3 class="module-title">Collaborations</h3>
+            <p class="module-description">Manage international partnerships, projects, and collaborative initiatives.</p>
+            <span class="module-link">View Partners <i data-lucide="arrow-right"></i></span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="modules-section">
+        <h2 class="section-title">
+          <i data-lucide="activity"></i>
+          Recent Activity
+        </h2>
+        <div class="activity-list" id="activity-list">
+          <div class="activity-item">
+            <div class="activity-icon"><i data-lucide="loader-2"></i></div>
+            <div class="activity-content">
+              <div class="activity-title">Loading activity...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/admin-sidebar.js"></script>
+<script src="js/admin-modal.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  (function() {
+    const SUPABASE_URL = 'https://wxcybeaafimxjhbhblzg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
+    
+    function refreshIcons() {
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    }
+
+    function formatTime(timestamp) {
+      if (!timestamp) return 'Recently';
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+      
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+      if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+      return date.toLocaleDateString();
+    }
+
+    async function loadStats(supabaseClient) {
+      const { data: orgData } = await supabaseClient
+        .from('organization_profile')
+        .select('org_name, updated_at')
+        .limit(1)
+        .maybeSingle();
+      
+      const orgStatus = document.getElementById('org-status');
+      if (orgData && orgData.org_name) {
+        orgStatus.innerHTML = '✓ Configured';
+        orgStatus.style.color = '#10B981';
+        
+        if (orgData.updated_at) {
+          const date = new Date(orgData.updated_at);
+          document.getElementById('last-updated').innerHTML = date.toLocaleDateString();
+        }
+      } else {
+        orgStatus.innerHTML = '! Not Set';
+        orgStatus.style.color = '#F59E0B';
+      }
+      
+      const { count: teamCount } = await supabaseClient
+        .from('team_members')
+        .select('*', { count: 'exact', head: true });
+      document.getElementById('team-count').textContent = teamCount || 0;
+      
+      const { count: collabCount } = await supabaseClient
+        .from('collaborations')
+        .select('*', { count: 'exact', head: true });
+      document.getElementById('collab-count').textContent = collabCount || 0;
+    }
+
+    async function loadActivity(supabaseClient) {
+      const activities = [];
+      
+      const { data: recentTeam } = await supabaseClient
+        .from('team_members')
+        .select('name, updated_at')
+        .order('updated_at', { ascending: false })
+        .limit(3);
+      
+      if (recentTeam && recentTeam.length > 0) {
+        recentTeam.forEach(member => {
+          activities.push({
+            title: `Team member "${member.name}" was updated`,
+            time: member.updated_at,
+            icon: 'user-plus'
+          });
+        });
+      }
+      
+      const { data: recentCollab } = await supabaseClient
+        .from('collaborations')
+        .select('title, updated_at')
+        .order('updated_at', { ascending: false })
+        .limit(3);
+      
+      if (recentCollab && recentCollab.length > 0) {
+        recentCollab.forEach(collab => {
+          activities.push({
+            title: `Collaboration "${collab.title}" was updated`,
+            time: collab.updated_at,
+            icon: 'handshake'
+          });
+        });
+      }
+      
+      const { data: orgData } = await supabaseClient
+        .from('organization_profile')
+        .select('updated_at, org_name')
+        .limit(1)
+        .maybeSingle();
+      
+      if (orgData && orgData.updated_at) {
+        activities.push({
+          title: `Organization profile "${orgData.org_name}" was updated`,
+          time: orgData.updated_at,
+          icon: 'building-2'
+        });
+      }
+      
+      activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+      const latestActivities = activities.slice(0, 5);
+      
+      const activityList = document.getElementById('activity-list');
+      if (latestActivities.length === 0) {
+        activityList.innerHTML = `
+          <div class="activity-item">
+            <div class="activity-icon"><i data-lucide="inbox"></i></div>
+            <div class="activity-content">
+              <div class="activity-title">No recent activity</div>
+              <div class="activity-time">Start by adding content to your site</div>
+            </div>
+          </div>
+        `;
+      } else {
+        activityList.innerHTML = latestActivities.map(activity => `
+          <div class="activity-item">
+            <div class="activity-icon"><i data-lucide="${activity.icon}"></i></div>
+            <div class="activity-content">
+              <div class="activity-title">${escapeHtml(activity.title)}</div>
+              <div class="activity-time"><i data-lucide="clock"></i> ${formatTime(activity.time)}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      refreshIcons();
+    }
+    
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+    
+    async function init() {
+      const appShell = document.getElementById('app-shell');
+      if (appShell) appShell.classList.remove('app-hidden');
+      
+      if (typeof renderAdminSidebar === 'function') {
+        try { renderAdminSidebar('dashboard'); } catch(e) { console.warn('Sidebar error:', e); }
+      }
+      
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      await loadStats(supabaseClient);
+      await loadActivity(supabaseClient);
+      refreshIcons();
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+</body>
+</html>

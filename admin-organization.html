@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="images/Admin-icon.jpg" id="favicon"> 
+  <title>Organization Profile | IAL Admin</title>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <link rel="stylesheet" href="css/admin-sidebar.css"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    if (localStorage.getItem('adminLoggedIn') !== 'true') {
+      location.replace('admin-login.html');
+    }
+  </script>
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --primary-dark: #0f2b48;
+      --success: #10b981;
+      --danger: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+    }
+
+    .form-section {
+      background: white;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+
+    .form-section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .form-section__header i {
+      color: var(--primary);
+    }
+
+    .form-section__header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      margin: 0;
+    }
+
+    .form-section__body {
+      padding: 1.5rem;
+    }
+
+    .form-cols-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .form-cols-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-500);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .field input, .field textarea {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      background: white;
+      color: var(--gray-700);
+    }
+
+    .field input:focus, .field textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* View Mode - Readonly */
+    .view-mode .field input,
+    .view-mode .field textarea {
+      background: var(--gray-50);
+      border-color: var(--gray-200);
+      color: var(--gray-600);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .view-mode .image-preview {
+      cursor: default;
+      opacity: 0.8;
+    }
+
+    .view-mode .image-preview:hover {
+      transform: none;
+      border-color: var(--gray-200);
+    }
+
+    .view-mode .btn-upload {
+      display: none;
+    }
+
+    /* Edit Mode */
+    .edit-mode .field input,
+    .edit-mode .field textarea {
+      background: white;
+      border-color: var(--gray-300);
+      color: var(--gray-800);
+      pointer-events: auto;
+    }
+
+    /* Image Upload */
+    .image-upload-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .image-preview {
+      width: 140px;
+      height: 140px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--gray-100);
+      border: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .edit-mode .image-preview {
+      cursor: pointer;
+    }
+
+    .edit-mode .image-preview:hover {
+      border-color: var(--primary);
+      transform: scale(1.02);
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-preview.placeholder {
+      flex-direction: column;
+      gap: 0.5rem;
+      color: var(--gray-400);
+      font-size: 0.75rem;
+    }
+
+    .btn-upload {
+      background: white;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--gray-600);
+    }
+
+    .btn-upload:hover {
+      background: var(--gray-50);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--gray-600);
+      border: 1.5px solid var(--gray-200);
+    }
+
+    .btn-secondary:hover {
+      background: var(--gray-50);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .toast-message {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      animation: slideInRight 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .toast-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .toast-error {
+      background: var(--danger);
+      color: white;
+    }
+
+    .status-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    .last-updated-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      background: #ecfdf5;
+      color: var(--success);
+    }
+
+    .mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: white;
+    }
+
+    .mode-badge.view {
+      color: var(--gray-600);
+    }
+
+    .mode-badge.edit {
+      background: var(--primary);
+      color: white;
+    }
+
+    .required-star {
+      color: var(--danger);
+    }
+
+    .field-hint {
+      font-size: 0.7rem;
+      color: var(--gray-400);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-spinner {
+      animation: spin 0.8s linear infinite;
+    }
+
+    @media (max-width: 768px) {
+      .form-cols-2, .form-cols-3 {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .action-buttons {
+        flex-direction: column-reverse;
+      }
+      .btn {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app-shell" class="app app-hidden">
+  <div id="admin-sidebar-root"></div>
+  
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-heading">
+          <span class="topbar-icon">
+            <i data-lucide="building-2"></i>
+          </span>
+          <div>
+            <h2>Organization Profile</h2>
+            <p>Manage your institution's public information</p>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="mode-indicator" class="mode-badge view">
+          <i data-lucide="eye"></i> View Mode
+        </span>
+        <span id="connection-status" class="status-dot">
+          <i data-lucide="wifi"></i> Connected
+        </span>
+        <span id="last-updated-badge" class="last-updated-badge" style="display: none;">
+          <i data-lucide="clock"></i>
+          <span id="last-updated-text"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="card" id="profile-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              <i data-lucide="settings"></i>
+              Profile Settings
+            </div>
+            <div class="card-subtitle">Core information displayed on your public website</div>
+          </div>
+        </div>
+
+        <form id="profile-form" class="admin-form" style="padding: 1.5rem;">
+          <!-- Organization Section -->
+          <div class="form-section">
+            <div class="form-section__header">
+              <i data-lucide="building-2" size="18"></i>
+              <h3>Organization Information</h3>
+            </div>
+            <div class="form-section__body">
+              <div class="form-cols-2">
+                <div class="field">
+                  <label><i data-lucide="building"></i> Organization Name <span class="required-star">*</span></label>
+                  <input type="text" id="org-name" name="org_name" placeholder="Organization Name" required readonly/>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="file-text"></i> Description</label>
+                  <textarea id="org-description" name="description" placeholder="Brief description" rows="3" readonly></textarea>
+                  <span class="field-hint">A short summary that appears in the hero section</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mission & Vision Section -->
+          <div class="form-section">
+            <div class="form-section__header">
+              <i data-lucide="target" size="18"></i>
+              <h3>Mission & Vision</h3>
+            </div>
+            <div class="form-section__body">
+              <div class="form-cols-2">
+                <div class="field">
+                  <label><i data-lucide="flag"></i> Mission Statement</label>
+                  <textarea id="org-mission" name="mission_statement" placeholder="Mission statement" rows="5" readonly></textarea>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="eye"></i> Vision Statement</label>
+                  <textarea id="org-vision" name="vision_statement" placeholder="Vision statement" rows="5" readonly></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Branding Section -->
+          <div class="form-section">
+            <div class="form-section__header">
+              <i data-lucide="image" size="18"></i>
+              <h3>Branding & Media</h3>
+            </div>
+            <div class="form-section__body">
+              <div class="form-cols-2">
+                <div class="field">
+                  <label><i data-lucide="image"></i> Organization Logo</label>
+                  <div class="image-upload-area">
+                    <div id="logo-preview" class="image-preview placeholder">
+                      <i data-lucide="image"></i>
+                      <span>No logo</span>
+                    </div>
+                    <input hidden type="text" id="org-logo" name="logo_path" placeholder="Image URL" style="width: 100%;" readonly/>
+                    <button type="button" class="btn-upload" id="logo-upload-btn" style="display: none;">
+                      <i data-lucide="folder-open"></i> Browse Files
+                    </button>
+                    <input type="file" id="logo-file-input" hidden accept="image/*"/>
+                  </div>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="camera"></i> Cover Image</label>
+                  <div class="image-upload-area">
+                    <div id="cover-preview" class="image-preview placeholder">
+                      <i data-lucide="image"></i>
+                      <span>No cover</span>
+                    </div>
+                    <input hidden type="text" id="org-cover" name="cover_image_path" placeholder="Image URL" style="width: 100%;" readonly/>
+                    <button type="button" class="btn-upload" id="cover-upload-btn" style="display: none;">
+                      <i data-lucide="folder-open"></i> Browse Files
+                    </button>
+                    <input type="file" id="cover-file-input" hidden accept="image/*"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Section -->
+          <div class="form-section">
+            <div class="form-section__header">
+              <i data-lucide="phone" size="18"></i>
+              <h3>Contact Information</h3>
+            </div>
+            <div class="form-section__body">
+              <div class="form-cols-3">
+                <div class="field">
+                  <label><i data-lucide="mail"></i> Email</label>
+                  <input type="email" id="org-email" name="email" placeholder="email@example.com" readonly/>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="phone"></i> Phone</label>
+                  <input type="tel" id="org-phone" name="phone" placeholder="+63 XXX XXX XXXX" readonly/>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="map-pin"></i> Address</label>
+                  <input type="text" id="org-address" name="address" placeholder="Full address" readonly/>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="globe"></i> Website</label>
+                  <input type="url" id="org-website" name="website" placeholder="https://example.com" readonly/>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="calendar"></i> Founded Year</label>
+                  <input type="number" id="org-founded" name="founded_year" placeholder="2020" readonly/>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="users"></i> Students/Faculty</label>
+                  <input type="text" id="org-employees" name="employee_count" placeholder="e.g., 2,500+ students" readonly/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button type="button" id="edit-btn" class="btn btn-primary">
+              <i data-lucide="edit-2"></i> Edit Profile
+            </button>
+            <button type="button" id="cancel-btn" class="btn btn-secondary" style="display: none;">
+              <i data-lucide="x"></i> Cancel
+            </button>
+            <button type="submit" id="update-btn" class="btn btn-success" style="display: none;">
+              <i data-lucide="save"></i> Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/admin-sidebar.js"></script>
+<script>
+  (function() {
+    const SUPABASE_URL = 'https://wxcybeaafimxjhbhblzg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
+    
+    let supabase = null;
+    let originalData = null;
+    let isEditMode = false;
+    
+    function showToast(message, isError = false) {
+      const toast = document.createElement('div');
+      toast.className = `toast-message ${isError ? 'toast-error' : 'toast-success'}`;
+      toast.innerHTML = isError ? `<i data-lucide="alert-circle"></i> ${message}` : `<i data-lucide="check-circle"></i> ${message}`;
+      document.body.appendChild(toast);
+      refreshIcons();
+      setTimeout(() => toast.remove(), 4000);
+    }
+    
+    function refreshIcons() {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+    
+    function updateConnectionStatus(connected, message = '') {
+      const statusSpan = document.getElementById('connection-status');
+      if (statusSpan) {
+        statusSpan.innerHTML = connected ? '<i data-lucide="wifi"></i> Connected' : `<i data-lucide="wifi-off"></i> ${message || 'Disconnected'}`;
+        refreshIcons();
+      }
+    }
+    
+    function updateLastUpdatedBadge(timestamp) {
+      const badge = document.getElementById('last-updated-badge');
+      const textSpan = document.getElementById('last-updated-text');
+      if (timestamp) {
+        const date = new Date(timestamp);
+        const formattedDate = date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        if (textSpan) textSpan.innerHTML = `Last updated: ${formattedDate}`;
+        if (badge) badge.style.display = 'inline-flex';
+      } else if (badge) badge.style.display = 'none';
+      refreshIcons();
+    }
+    
+    function updateModeIndicator() {
+      const indicator = document.getElementById('mode-indicator');
+      const card = document.getElementById('profile-card');
+      if (indicator) {
+        if (isEditMode) {
+          indicator.innerHTML = '<i data-lucide="edit-2"></i> Edit Mode';
+          indicator.className = 'mode-badge edit';
+          card.classList.remove('view-mode');
+          card.classList.add('edit-mode');
+        } else {
+          indicator.innerHTML = '<i data-lucide="eye"></i> View Mode';
+          indicator.className = 'mode-badge view';
+          card.classList.remove('edit-mode');
+          card.classList.add('view-mode');
+        }
+        refreshIcons();
+      }
+    }
+    
+    function setEditMode(enabled) {
+      isEditMode = enabled;
+      const inputs = document.querySelectorAll('#profile-form input, #profile-form textarea');
+      const uploadBtns = document.querySelectorAll('.btn-upload');
+      const editBtn = document.getElementById('edit-btn');
+      const cancelBtn = document.getElementById('cancel-btn');
+      const updateBtn = document.getElementById('update-btn');
+      
+      inputs.forEach(input => {
+        if (enabled) {
+          input.removeAttribute('readonly');
+          input.style.pointerEvents = 'auto';
+        } else {
+          input.setAttribute('readonly', 'readonly');
+          input.style.pointerEvents = 'none';
+        }
+      });
+      
+      uploadBtns.forEach(btn => {
+        btn.style.display = enabled ? 'inline-flex' : 'none';
+      });
+      
+      if (editBtn) editBtn.style.display = enabled ? 'none' : 'inline-flex';
+      if (cancelBtn) cancelBtn.style.display = enabled ? 'inline-flex' : 'none';
+      if (updateBtn) updateBtn.style.display = enabled ? 'inline-flex' : 'none';
+      
+      updateModeIndicator();
+    }
+    
+    function resetFormToOriginal() {
+      if (originalData) {
+        setFormData(originalData);
+        showToast('Changes reset to last saved version');
+      }
+    }
+    
+    function assetURL(path) {
+      if (!path) return '';
+      if (/^(https?:|data:|blob:|images\/|\.\/|\/)/i.test(path)) return path;
+      return `${SUPABASE_URL}/storage/v1/object/public/${path.replace(/^\/+/, '')}`;
+    }
+    
+    function previewImage(file, previewElement, inputElement) {
+      if (!file) return false;
+      
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('Image too large (max 5MB)', true);
+        return false;
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        showToast('Please upload an image file', true);
+        return false;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        if (previewElement) {
+          previewElement.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+          previewElement.classList.remove('placeholder');
+        }
+        if (inputElement) inputElement.value = e.target.result;
+        refreshIcons();
+        showToast('Image ready to save', false);
+      };
+      reader.readAsDataURL(file);
+      return true;
+    }
+    
+    function getFormData() {
+      return {
+        org_name: document.getElementById('org-name')?.value.trim() || '',
+        description: document.getElementById('org-description')?.value.trim() || '',
+        mission_statement: document.getElementById('org-mission')?.value.trim() || '',
+        vision_statement: document.getElementById('org-vision')?.value.trim() || '',
+        cover_image_path: document.getElementById('org-cover')?.value.trim() || '',
+        logo_path: document.getElementById('org-logo')?.value.trim() || '',
+        email: document.getElementById('org-email')?.value.trim() || '',
+        phone: document.getElementById('org-phone')?.value.trim() || '',
+        address: document.getElementById('org-address')?.value.trim() || '',
+        website: document.getElementById('org-website')?.value.trim() || '',
+        founded_year: document.getElementById('org-founded')?.value ? parseInt(document.getElementById('org-founded').value) : null,
+        employee_count: document.getElementById('org-employees')?.value.trim() || null
+      };
+    }
+    
+    function setFormData(data) {
+      document.getElementById('org-name').value = data.org_name || '';
+      document.getElementById('org-description').value = data.description || '';
+      document.getElementById('org-mission').value = data.mission_statement || '';
+      document.getElementById('org-vision').value = data.vision_statement || '';
+      document.getElementById('org-cover').value = data.cover_image_path || '';
+      document.getElementById('org-logo').value = data.logo_path || '';
+      document.getElementById('org-email').value = data.email || '';
+      document.getElementById('org-phone').value = data.phone || '';
+      document.getElementById('org-address').value = data.address || '';
+      document.getElementById('org-website').value = data.website || '';
+      document.getElementById('org-founded').value = data.founded_year || '';
+      document.getElementById('org-employees').value = data.employee_count || '';
+      
+      const logoPreview = document.getElementById('logo-preview');
+      if (data.logo_path && data.logo_path.trim()) {
+        const logoUrl = assetURL(data.logo_path);
+        logoPreview.innerHTML = `<img src="${logoUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+        logoPreview.classList.remove('placeholder');
+      } else {
+        logoPreview.innerHTML = '<i data-lucide="image"></i><span>No logo</span>';
+        logoPreview.classList.add('placeholder');
+      }
+      
+      const coverPreview = document.getElementById('cover-preview');
+      if (data.cover_image_path && data.cover_image_path.trim()) {
+        const coverUrl = assetURL(data.cover_image_path);
+        coverPreview.innerHTML = `<img src="${coverUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+        coverPreview.classList.remove('placeholder');
+      } else {
+        coverPreview.innerHTML = '<i data-lucide="image"></i><span>No cover</span>';
+        coverPreview.classList.add('placeholder');
+      }
+      refreshIcons();
+    }
+    
+    async function loadOrganizationProfile() {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase.from('organization_profile').select('*').order('updated_at', { ascending: false }).limit(1).maybeSingle();
+        if (error && !error.message.includes('no rows')) throw error;
+        if (data) {
+          originalData = JSON.parse(JSON.stringify(data));
+          setFormData(data);
+          if (data.updated_at) updateLastUpdatedBadge(data.updated_at);
+        }
+        setEditMode(false);
+      } catch (err) {
+        console.error('Error loading profile:', err);
+        showToast('Error loading profile: ' + err.message, true);
+      }
+    }
+    
+    async function saveOrganizationProfile(formData) {
+      if (!supabase) return false;
+      const updateBtn = document.getElementById('update-btn');
+      const originalHTML = updateBtn ? updateBtn.innerHTML : '';
+      try {
+        if (updateBtn) {
+          updateBtn.innerHTML = '<i data-lucide="loader-2" class="loading-spinner"></i> Saving...';
+          updateBtn.disabled = true;
+          refreshIcons();
+        }
+        
+        const { data: existing } = await supabase.from('organization_profile').select('id').limit(1).maybeSingle();
+        let result;
+        
+        if (existing) {
+          result = await supabase.from('organization_profile').update({
+            org_name: formData.org_name,
+            description: formData.description || null,
+            mission_statement: formData.mission_statement || null,
+            vision_statement: formData.vision_statement || null,
+            cover_image_path: formData.cover_image_path || null,
+            logo_path: formData.logo_path || null,
+            email: formData.email || null,
+            phone: formData.phone || null,
+            address: formData.address || null,
+            website: formData.website || null,
+            founded_year: formData.founded_year || null,
+            employee_count: formData.employee_count || null,
+            updated_at: new Date().toISOString()
+          }).eq('id', existing.id);
+          
+          if (result.error) throw result.error;
+          showToast('Organization profile updated successfully!');
+          updateLastUpdatedBadge(new Date().toISOString());
+          originalData = JSON.parse(JSON.stringify(formData));
+        } else {
+          result = await supabase.from('organization_profile').insert([{
+            org_name: formData.org_name,
+            description: formData.description || null,
+            mission_statement: formData.mission_statement || null,
+            vision_statement: formData.vision_statement || null,
+            cover_image_path: formData.cover_image_path || null,
+            logo_path: formData.logo_path || null,
+            email: formData.email || null,
+            phone: formData.phone || null,
+            address: formData.address || null,
+            website: formData.website || null,
+            founded_year: formData.founded_year || null,
+            employee_count: formData.employee_count || null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }]);
+          
+          if (result.error) throw result.error;
+          showToast('Organization profile created successfully!');
+          updateLastUpdatedBadge(new Date().toISOString());
+          originalData = JSON.parse(JSON.stringify(formData));
+        }
+        
+        setEditMode(false);
+        return true;
+      } catch (err) {
+        console.error('Save error:', err);
+        showToast('Save failed: ' + err.message, true);
+        return false;
+      } finally {
+        if (updateBtn) {
+          updateBtn.innerHTML = originalHTML;
+          updateBtn.disabled = false;
+          refreshIcons();
+        }
+      }
+    }
+    
+    // File upload handlers
+    const logoFileInput = document.getElementById('logo-file-input');
+    const coverFileInput = document.getElementById('cover-file-input');
+    
+    const logoUploadBtn = document.getElementById('logo-upload-btn');
+    if (logoUploadBtn) {
+      logoUploadBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isEditMode && logoFileInput) logoFileInput.click();
+        else if (!isEditMode) showToast('Click "Edit Profile" first to enable uploads', true);
+      });
+    }
+    
+    if (logoFileInput) {
+      logoFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file && isEditMode) {
+          previewImage(file, document.getElementById('logo-preview'), document.getElementById('org-logo'));
+        }
+        logoFileInput.value = '';
+      });
+    }
+    
+    const coverUploadBtn = document.getElementById('cover-upload-btn');
+    if (coverUploadBtn) {
+      coverUploadBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isEditMode && coverFileInput) coverFileInput.click();
+        else if (!isEditMode) showToast('Click "Edit Profile" first to enable uploads', true);
+      });
+    }
+    
+    if (coverFileInput) {
+      coverFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file && isEditMode) {
+          previewImage(file, document.getElementById('cover-preview'), document.getElementById('org-cover'));
+        }
+        coverFileInput.value = '';
+      });
+    }
+    
+    const logoPreview = document.getElementById('logo-preview');
+    if (logoPreview) {
+      logoPreview.addEventListener('click', () => {
+        if (isEditMode && logoFileInput) logoFileInput.click();
+        else if (!isEditMode) showToast('Click "Edit Profile" first to enable uploads', true);
+      });
+    }
+    
+    const coverPreview = document.getElementById('cover-preview');
+    if (coverPreview) {
+      coverPreview.addEventListener('click', () => {
+        if (isEditMode && coverFileInput) coverFileInput.click();
+        else if (!isEditMode) showToast('Click "Edit Profile" first to enable uploads', true);
+      });
+    }
+    
+    const editBtn = document.getElementById('edit-btn');
+    if (editBtn) editBtn.addEventListener('click', () => setEditMode(true));
+    
+    const cancelBtn = document.getElementById('cancel-btn');
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        if (confirm('Cancel editing? Any unsaved changes will be lost.')) {
+          resetFormToOriginal();
+          setEditMode(false);
+        }
+      });
+    }
+    
+    const profileForm = document.getElementById('profile-form');
+    if (profileForm) {
+      profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isEditMode) {
+          showToast('Click "Edit Profile" first to make changes', true);
+          return;
+        }
+        const formData = getFormData();
+        if (!formData.org_name) {
+          showToast('Organization name is required', true);
+          document.getElementById('org-name')?.focus();
+          return;
+        }
+        await saveOrganizationProfile(formData);
+      });
+    }
+    
+    async function initializeSupabase() {
+      updateConnectionStatus(false, 'Connecting...');
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+      try {
+        await supabase.from('organization_profile').select('count', { count: 'exact', head: true });
+        updateConnectionStatus(true);
+        await loadOrganizationProfile();
+      } catch (err) {
+        updateConnectionStatus(false, err.message);
+        showToast('Failed to connect: ' + err.message, true);
+      }
+    }
+    
+    window.addEventListener('DOMContentLoaded', async () => {
+      const appShell = document.getElementById('app-shell');
+      if (appShell) appShell.classList.remove('app-hidden');
+      if (typeof renderAdminSidebar === 'function') {
+        try { renderAdminSidebar('organization'); } catch(e) {}
+      }
+      refreshIcons();
+      await initializeSupabase();
+    });
+  })();
+</script>
+</body>
+</html>

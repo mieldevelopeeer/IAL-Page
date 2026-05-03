@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="images/Admin-icon.jpg" id="favicon"> 
+  <title>Team | IAL Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f5f7fb;
+      color: #1a1f2e;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .app-hidden {
+      visibility: hidden;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.2s;
+    }
+
+    .topbar {
+      background: white;
+      border-bottom: 1px solid #e4e9f2;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .topbar-left {
+      flex: 1;
+    }
+
+    .topbar-heading {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .topbar-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .topbar-heading h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #1e3a5f, #2d5b9e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .topbar-heading p {
+      color: #6c7a91;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .status-dot {
+      background: #e6f7e6;
+      color: #2b6e2f;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot.error {
+      background: #fee9e9;
+      color: #c2412c;
+    }
+
+    .status-dot.connecting {
+      background: #fff3e0;
+      color: #e67e22;
+    }
+
+    .page-content {
+      padding: 1.5rem 2rem;
+      flex: 1;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid #eef2f8;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #eef2f8;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #fafbfd;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1e3a5f;
+    }
+
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: #6c7a91;
+      margin-top: 0.25rem;
+    }
+
+    .add-btn {
+      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+    }
+
+    .save-msg {
+      font-size: 0.8rem;
+      margin-right: 1rem;
+      color: #10b981;
+    }
+
+    .save-msg.error {
+      color: #dc2626;
+    }
+
+    /* Team Grid */
+    .team-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0;
+      min-height: 400px;
+    }
+
+    .team-item {
+      background: #ffffff;
+      border-bottom: 1px solid #eef2f8;
+      padding: 1rem 1.5rem;
+      transition: all 0.2s;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .team-item:hover {
+      background: #fafcff;
+      transform: translateX(4px);
+    }
+
+    .team-info {
+      flex: 4;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .team-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #f0f2f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .team-details {
+      flex: 1;
+    }
+
+    .team-name {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .team-name span {
+      font-size: 1rem;
+    }
+
+    .badge-active {
+      background: #e0f2e9;
+      color: #1c6e3f;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .badge-inactive {
+      background: #f1f3f5;
+      color: #5c6f87;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+
+    .team-position {
+      font-size: 0.8rem;
+      color: #6c7a91;
+      margin-top: 4px;
+    }
+
+    .team-role {
+      font-size: 0.7rem;
+      background: #eef2ff;
+      color: #1e3a5f;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    .team-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #6c7a91;
+      transition: all 0.2s;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .icon-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .icon-btn.view-btn:hover {
+      background: #e6f7ff;
+      color: #0891b2;
+    }
+
+    .icon-btn.edit-btn:hover {
+      background: #eef2ff;
+      color: #1e3a5f;
+    }
+
+    .icon-btn.delete-btn:hover {
+      background: #fee9e9;
+      color: #dc2626;
+    }
+
+    /* Pagination Styles */
+    .pagination-container {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eef2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #fafbfd;
+    }
+
+    .pagination-info {
+      font-size: 0.8rem;
+      color: #6c7a91;
+    }
+
+    .pagination-buttons {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .page-btn {
+      background: white;
+      border: 1px solid #e2e8f0;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      color: #475569;
+      min-width: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background: #1e3a5f;
+      color: white;
+      border-color: #1e3a5f;
+    }
+
+    .page-btn.active {
+      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
+      color: white;
+      border-color: #1e3a5f;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Modal Styles */
+    .ial-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(4px);
+    }
+
+    .ial-modal[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .ial-modal__sheet {
+      background: white;
+      max-width: 720px;
+      width: 90%;
+      border-radius: 24px;
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.2);
+      animation: modalFadeIn 0.2s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .ial-modal__header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #eef2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 10;
+    }
+
+    .ial-modal__title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e3a5f;
+    }
+
+    .ial-modal__close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .ial-modal__close:hover {
+      background: #f1f5f9;
+      color: #1f2937;
+    }
+
+    .ial-modal__body {
+      padding: 1.5rem;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field label {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .field input, .field textarea, .field select {
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      outline: none;
+      border-color: #1e3a5f;
+      box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+
+    .btn-upload {
+      margin-top: 0.5rem;
+      background: #f1f5f9;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-upload:hover {
+      background: #e2e8f0;
+      border-color: #1e3a5f;
+    }
+
+    .img-preview {
+      margin-top: 10px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .img-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ial-modal__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eef2f8;
+    }
+
+    .btn {
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
+      color: white;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+    }
+
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    .btn-cancel:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .loading-placeholder {
+      padding: 2rem;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    .empty-state {
+      padding: 3rem;
+      text-align: center;
+      color: #94a3b8;
+    }
+  </style>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <link rel="stylesheet" href="css/admin-sidebar.css"/>
+  <link rel="stylesheet" href="css/admin-icons.css"/>
+  <script>
+    if (localStorage.getItem('adminLoggedIn') !== 'true') {
+      location.replace('admin-login.html');
+    }
+  </script>
+</head>
+<body>
+<div id="app-shell" class="app app-hidden">
+  <div id="admin-sidebar-root"></div>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-heading">
+          <span class="topbar-icon">
+            <i data-lucide="users"></i>
+          </span>
+          <div>
+            <h2>Team Management</h2>
+            <p>Manage team members</p>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right"><span id="connection-status" class="status-dot connecting"><i data-lucide="wifi"></i> Connecting...</span></div>
+    </div>
+
+    <div class="page-content">
+      <div id="policy-status" class="policy-banner" style="display: none;"></div>
+      
+      <div id="team-panel" class="tab-panel active">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i data-lucide="users"></i> Team Members</div>
+              <div class="card-subtitle">Manage names, positions, photos, and contact details</div>
+            </div>
+            <div class="card-header-actions">
+              <span id="team-msg" class="save-msg"></span>
+              <button type="button" class="add-btn" id="add-team-btn">
+                <i data-lucide="plus"></i>
+                <span>Add member</span>
+              </button>
+            </div>
+          </div>
+          <div id="team-list" class="team-grid">
+            <div class="loading-placeholder">Loading team members...</div>
+          </div>
+          <div id="pagination-container" class="pagination-container" style="display: none;">
+            <div class="pagination-info">
+              <i data-lucide="info"></i> Showing <span id="showing-start">0</span> - <span id="showing-end">0</span> of <span id="total-items">0</span> members
+            </div>
+            <div class="pagination-buttons" id="pagination-buttons"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="team-modal" class="ial-modal" aria-hidden="true">
+  <div class="ial-modal__sheet">
+    <div class="ial-modal__header">
+      <h3 id="team-modal-title" class="ial-modal__title"><i data-lucide="user-plus"></i> Add Team Member</h3>
+      <button class="ial-modal__close modal-dismiss"><i data-lucide="x"></i></button>
+    </div>
+    <div class="ial-modal__body">
+      <form id="team-modal-form">
+        <input type="hidden" id="modal-team-id">
+        <div class="form-grid">
+          <div class="form-cols-2">
+            <div class="field">
+              <label><i data-lucide="user"></i> Full Name *</label>
+              <input type="text" id="modal-team-name" required placeholder="John Doe">
+            </div>
+            <div class="field">
+              <label><i data-lucide="briefcase"></i> Position *</label>
+              <input type="text" id="modal-team-position" required placeholder="Director">
+            </div>
+            <div class="field">
+              <label><i data-lucide="tag"></i> Role Type</label>
+              <select id="modal-team-role">
+                <option value="president">President</option>
+                <option value="founder">Founder</option>
+                <option value="member" selected>Team Member</option>
+              </select>
+            </div>
+            <div class="field">
+              <label><i data-lucide="list-ordered"></i> Display Order</label>
+              <input type="number" id="modal-team-order" value="0" min="0" step="1">
+            </div>
+            <div class="field">
+              <label><i data-lucide="image"></i> Photo</label>
+              <input type="text" id="modal-team-image" placeholder="Image URL">
+              <button type="button" class="btn-upload" id="modal-team-upload-btn">
+                <i data-lucide="upload"></i> Upload
+              </button>
+              <input type="file" id="modal-team-file" hidden accept="image/*">
+              <div id="modal-team-preview" class="img-preview"></div>
+            </div>
+            <div class="field">
+              <label class="checkbox-row">
+                <input type="checkbox" id="modal-team-active" checked>
+                <i data-lucide="eye"></i> Show on public site
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <label><i data-lucide="align-left"></i> Bio</label>
+            <textarea id="modal-team-bio" rows="3" placeholder="Short biography..."></textarea>
+          </div>
+          <div class="form-cols-2">
+            <div class="field">
+              <label><i data-lucide="mail"></i> Email</label>
+              <input type="email" id="modal-team-email" placeholder="john@example.com">
+            </div>
+            <div class="field">
+              <label><i data-lucide="linkedin"></i> LinkedIn URL</label>
+              <input type="url" id="modal-team-linkedin" placeholder="https://linkedin.com/in/username">
+            </div>
+          </div>
+        </div>
+        <div class="ial-modal__actions">
+          <button type="submit" class="btn btn-save"><i data-lucide="save"></i> Save Member</button>
+          <button type="button" class="btn btn-cancel modal-dismiss"><i data-lucide="x"></i> Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- View Modal -->
+<div id="view-team-modal" class="ial-modal" aria-hidden="true">
+  <div class="ial-modal__sheet">
+    <div class="ial-modal__header">
+      <h3 class="ial-modal__title"><i data-lucide="user"></i> Team Member Details</h3>
+      <button class="ial-modal__close view-modal-dismiss"><i data-lucide="x"></i></button>
+    </div>
+    <div class="ial-modal__body view-mode">
+      <div id="view-team-content"></div>
+      <div class="ial-modal__actions">
+        <button type="button" class="btn btn-cancel view-modal-dismiss">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-confirm-modal" class="ial-modal" aria-hidden="true">
+  <div class="ial-modal__sheet" style="max-width: 400px;">
+    <div class="ial-modal__header">
+      <h3 class="ial-modal__title"><i data-lucide="alert-triangle"></i> Confirm Delete</h3>
+      <button class="ial-modal__close delete-modal-dismiss"><i data-lucide="x"></i></button>
+    </div>
+    <div class="ial-modal__body">
+      <p>Are you sure you want to delete this team member?</p>
+      <p class="warning-text" style="color: #dc2626; margin: 1rem 0;"><strong>⚠️ This action cannot be undone!</strong></p>
+      <div id="delete-item-info" style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; margin: 1rem 0;"></div>
+      <div class="ial-modal__actions">
+        <button type="button" class="btn btn-danger" id="confirm-delete-btn"><i data-lucide="trash-2"></i> Delete Permanently</button>
+        <button type="button" class="btn btn-cancel delete-modal-dismiss">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/admin-sidebar.js"></script>
+<script>
+  (function() {
+    const SUPABASE_URL = 'https://wxcybeaafimxjhbhblzg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
+    const ITEMS_PER_PAGE = 10;
+    
+    let supabase = null;
+    let pendingDeleteId = null;
+    let pendingDeleteName = null;
+    let allTeamMembers = [];
+    let currentPage = 1;
+    let totalPages = 1;
+    
+    const container = document.getElementById('team-list');
+    const modal = document.getElementById('team-modal');
+    const viewModal = document.getElementById('view-team-modal');
+    const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+    const viewContent = document.getElementById('view-team-content');
+    const deleteItemInfo = document.getElementById('delete-item-info');
+    const modalTitle = document.getElementById('team-modal-title');
+    const form = document.getElementById('team-modal-form');
+    const memberIdInput = document.getElementById('modal-team-id');
+    const nameInput = document.getElementById('modal-team-name');
+    const positionInput = document.getElementById('modal-team-position');
+    const roleSelect = document.getElementById('modal-team-role');
+    const orderInput = document.getElementById('modal-team-order');
+    const imageInput = document.getElementById('modal-team-image');
+    const bioInput = document.getElementById('modal-team-bio');
+    const emailInput = document.getElementById('modal-team-email');
+    const linkedinInput = document.getElementById('modal-team-linkedin');
+    const activeCheck = document.getElementById('modal-team-active');
+    const fileUpload = document.getElementById('modal-team-file');
+    const previewDiv = document.getElementById('modal-team-preview');
+    const msgSpan = document.getElementById('team-msg');
+    const statusSpan = document.getElementById('connection-status');
+    const paginationContainer = document.getElementById('pagination-container');
+    const paginationButtons = document.getElementById('pagination-buttons');
+    
+    function refreshIcons() {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+    
+    function cleanText(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/<[^>]*>/g, '')
+        .replace(/&[a-z]+;/gi, '')
+        .replace(/['"&gt;`]/g, '')
+        .trim();
+    }
+    
+    function showMessage(msg, isError = false) {
+      if (msgSpan) {
+        msgSpan.innerHTML = isError ? `<i data-lucide="alert-circle"></i> ${msg}` : `<i data-lucide="check-circle"></i> ${msg}`;
+        msgSpan.className = isError ? 'save-msg error' : 'save-msg';
+        setTimeout(() => { if(msgSpan) msgSpan.innerHTML = ''; }, 4000);
+        refreshIcons();
+      }
+    }
+    
+    function updateConnectionStatus(connected, message = '') {
+      if (statusSpan) {
+        if (connected) {
+          statusSpan.innerHTML = '<i data-lucide="wifi"></i> Connected';
+          statusSpan.className = 'status-dot';
+        } else {
+          statusSpan.innerHTML = `<i data-lucide="wifi-off"></i> ${message || 'Disconnected'}`;
+          statusSpan.className = 'status-dot error';
+        }
+        refreshIcons();
+      }
+    }
+    
+    function renderPagination() {
+      if (!allTeamMembers.length) {
+        paginationContainer.style.display = 'none';
+        return;
+      }
+      
+      paginationContainer.style.display = 'flex';
+      const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+      const end = Math.min(currentPage * ITEMS_PER_PAGE, allTeamMembers.length);
+      document.getElementById('showing-start').textContent = start;
+      document.getElementById('showing-end').textContent = end;
+      document.getElementById('total-items').textContent = allTeamMembers.length;
+      
+      let buttonsHtml = '';
+      buttonsHtml += `<button class="page-btn" id="prev-page" ${currentPage === 1 ? 'disabled' : ''}><i data-lucide="chevron-left"></i></button>`;
+      
+      const maxVisible = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+      if (endPage - startPage + 1 < maxVisible) {
+        startPage = Math.max(1, endPage - maxVisible + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        buttonsHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+      }
+      
+      buttonsHtml += `<button class="page-btn" id="next-page" ${currentPage === totalPages ? 'disabled' : ''}><i data-lucide="chevron-right"></i></button>`;
+      
+      paginationButtons.innerHTML = buttonsHtml;
+      refreshIcons();
+      
+      document.getElementById('prev-page')?.addEventListener('click', () => {
+        if (currentPage > 1) goToPage(currentPage - 1);
+      });
+      document.getElementById('next-page')?.addEventListener('click', () => {
+        if (currentPage < totalPages) goToPage(currentPage + 1);
+      });
+      document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => goToPage(parseInt(btn.dataset.page)));
+      });
+    }
+    
+    function goToPage(page) {
+      currentPage = page;
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE;
+      const pageData = allTeamMembers.slice(start, end);
+      renderTeamMembers(pageData);
+      renderPagination();
+    }
+    
+    function getRoleBadge(role) {
+      const roleLabels = {
+        'president': 'President',
+        'founder': 'Founder',
+        'member': 'Team Member'
+      };
+      return roleLabels[role] || role || 'Team Member';
+    }
+    
+    function renderTeamMembers(members) {
+      if (!members.length) {
+        container.innerHTML = '<div class="empty-state"><i data-lucide="users"></i><p>No team members found.</p></div>';
+        refreshIcons();
+        return;
+      }
+      
+      container.innerHTML = `<div class="team-grid">${members.map(member => `
+        <div class="team-item" data-id="${member.id}">
+          <div class="team-info">
+            <div class="team-avatar">
+              ${member.image_path ? `<img src="${escapeHtml(member.image_path)}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22 viewBox=%220 0 24 24%22 fill=%22%238a99b0%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E'">` : '<i data-lucide="user"></i>'}
+            </div>
+            <div class="team-details">
+              <div class="team-name">
+                <span>${escapeHtml(cleanText(member.name))}</span>
+                ${member.is_active !== false ? '<span class="badge-active">active</span>' : '<span class="badge-inactive">inactive</span>'}
+                <span class="team-role">${getRoleBadge(member.role)}</span>
+                <span style="font-size:0.7rem; background:#f0f2f5; padding:0.1rem 0.5rem; border-radius:20px;">order: ${member.display_order || 0}</span>
+              </div>
+              <div class="team-position">${escapeHtml(cleanText(member.position)) || '—'}</div>
+            </div>
+          </div>
+          <div class="team-actions">
+            <button class="icon-btn view-btn" data-id="${member.id}" data-name="${escapeHtml(member.name)}" title="View details">
+              <i data-lucide="eye"></i> View
+            </button>
+            <button class="icon-btn edit-btn" data-id="${member.id}" title="Edit">
+              <i data-lucide="edit-2"></i> Edit
+            </button>
+            <button class="icon-btn delete-btn" data-id="${member.id}" data-name="${escapeHtml(member.name)}" title="Delete">
+              <i data-lucide="trash-2"></i> Delete
+            </button>
+          </div>
+        </div>
+      `).join('')}</div>`;
+      refreshIcons();
+      
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const member = allTeamMembers.find(m => m.id === id);
+          if (member) openViewModal(member);
+        });
+      });
+      
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const member = allTeamMembers.find(m => m.id === id);
+          if (member) openEditModal(member);
+        });
+      });
+      
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const name = btn.getAttribute('data-name');
+          openDeleteConfirm(id, name);
+        });
+      });
+    }
+    
+    function openViewModal(member) {
+      const avatarHtml = member.image_path ? 
+        `<div class="avatar-view"><img src="${escapeHtml(member.image_path)}" alt="${escapeHtml(member.name)}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22%238a99b0%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E'"></div>` : 
+        '<div class="avatar-view" style="display:flex;align-items:center;justify-content:center;background:#f0f2f5;"><i data-lucide="user" size="48"></i></div>';
+      
+      viewContent.innerHTML = `
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          ${avatarHtml}
+          <h3 style="margin-top:0.5rem;">${escapeHtml(cleanText(member.name))}</h3>
+          <p style="color:#4a5b79;">${escapeHtml(cleanText(member.position)) || '—'}</p>
+          <span class="team-role">${getRoleBadge(member.role)}</span>
+          ${member.is_active !== false ? '<span class="badge-active" style="margin-left:0.5rem;">active</span>' : '<span class="badge-inactive" style="margin-left:0.5rem;">inactive</span>'}
+        </div>
+        <div class="field">
+          <label><i data-lucide="align-left"></i> Bio</label>
+          <div class="field-value">${member.bio ? escapeHtml(cleanText(member.bio)).replace(/\n/g, '<br>') : '—'}</div>
+        </div>
+        <div class="form-cols-2">
+          <div class="field">
+            <label><i data-lucide="mail"></i> Email</label>
+            <div class="field-value">${member.email ? `<a href="mailto:${escapeHtml(member.email)}">${escapeHtml(member.email)}</a>` : '—'}</div>
+          </div>
+          <div class="field">
+            <label><i data-lucide="linkedin"></i> LinkedIn</label>
+            <div class="field-value">${member.linkedin_url ? `<a href="${escapeHtml(member.linkedin_url)}" target="_blank">View Profile</a>` : '—'}</div>
+          </div>
+        </div>
+        <div class="form-cols-2">
+          <div class="field">
+            <label><i data-lucide="list-ordered"></i> Display Order</label>
+            <div class="field-value">${member.display_order ?? 0}</div>
+          </div>
+          <div class="field">
+            <label><i data-lucide="tag"></i> Role Type</label>
+            <div class="field-value">${getRoleBadge(member.role)}</div>
+          </div>
+        </div>
+        <hr>
+        <div class="form-cols-2">
+          <div class="field">
+            <label><i data-lucide="calendar"></i> Created</label>
+            <div class="field-value"><small>${member.created_at ? new Date(member.created_at).toLocaleString() : '—'}</small></div>
+          </div>
+          <div class="field">
+            <label><i data-lucide="clock"></i> Last Updated</label>
+            <div class="field-value"><small>${member.updated_at ? new Date(member.updated_at).toLocaleString() : '—'}</small></div>
+          </div>
+        </div>
+      `;
+      refreshIcons();
+      viewModal.setAttribute('aria-hidden', 'false');
+      viewModal.style.display = 'flex';
+    }
+    
+    function openEditModal(member) {
+      memberIdInput.value = member.id || '';
+      nameInput.value = cleanText(member.name) || '';
+      positionInput.value = cleanText(member.position) || '';
+      roleSelect.value = member.role || 'member';
+      orderInput.value = member.display_order ?? 0;
+      imageInput.value = member.image_path || '';
+      bioInput.value = cleanText(member.bio) || '';
+      emailInput.value = member.email || '';
+      linkedinInput.value = member.linkedin_url || '';
+      activeCheck.checked = member.is_active !== false;
+      
+      if (member.image_path && previewDiv) {
+        previewDiv.innerHTML = `<img src="${escapeHtml(member.image_path)}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
+      } else {
+        previewDiv.innerHTML = '';
+      }
+      
+      modalTitle.innerHTML = '<i data-lucide="edit-2"></i> Edit Team Member';
+      modal.setAttribute('aria-hidden', 'false');
+      modal.style.display = 'flex';
+      refreshIcons();
+    }
+    
+    function openDeleteConfirm(id, name) {
+      pendingDeleteId = id;
+      pendingDeleteName = cleanText(name);
+      deleteItemInfo.innerHTML = `<strong>${escapeHtml(cleanText(name))}</strong><br><small>ID: ${id}</small>`;
+      deleteConfirmModal.setAttribute('aria-hidden', 'false');
+      deleteConfirmModal.style.display = 'flex';
+    }
+    
+    async function confirmDelete() {
+      if (!pendingDeleteId) return;
+      if (!supabase) { showMessage('Database not connected', true); return; }
+      
+      showMessage('Deleting team member...', false);
+      
+      try {
+        const { error } = await supabase.from('team_members').delete().eq('id', pendingDeleteId);
+        if (error) throw error;
+        
+        showMessage(`✓ Successfully deleted "${pendingDeleteName}"`, false);
+        deleteConfirmModal.setAttribute('aria-hidden', 'true');
+        deleteConfirmModal.style.display = 'none';
+        pendingDeleteId = null;
+        await fetchTeamMembers();
+      } catch(err) {
+        showMessage(`✗ Delete failed: ${err.message}`, true);
+      }
+    }
+    
+    function resetModal() {
+      form.reset();
+      memberIdInput.value = '';
+      nameInput.value = '';
+      positionInput.value = '';
+      roleSelect.value = 'member';
+      orderInput.value = '0';
+      imageInput.value = '';
+      bioInput.value = '';
+      emailInput.value = '';
+      linkedinInput.value = '';
+      activeCheck.checked = true;
+      previewDiv.innerHTML = '';
+      modalTitle.innerHTML = '<i data-lucide="user-plus"></i> Add Team Member';
+    }
+    
+    function assetURL(path) {
+      if (!path) return '';
+      if (/^(https?:|data:|blob:|images\/|\.\/|\/)/i.test(path)) return path;
+      return `${SUPABASE_URL}/storage/v1/object/public/${path.replace(/^\/+/, '')}`;
+    }
+    
+    async function fetchTeamMembers() {
+      if (!supabase) return;
+      
+      const { data, error } = await supabase
+        .from('team_members')
+        .select('*')
+        .order('display_order', { ascending: true })
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      
+      allTeamMembers = data || [];
+      totalPages = Math.ceil(allTeamMembers.length / ITEMS_PER_PAGE);
+      currentPage = 1;
+      
+      if (allTeamMembers.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i data-lucide="users"></i><p>No team members yet. Click "Add member" to get started.</p></div>';
+        paginationContainer.style.display = 'none';
+        refreshIcons();
+        return;
+      }
+      
+      const start = 0;
+      const end = ITEMS_PER_PAGE;
+      const pageData = allTeamMembers.slice(start, end);
+      renderTeamMembers(pageData);
+      renderPagination();
+    }
+    
+    async function saveTeamMember(payload) {
+      if (!supabase) { showMessage('Supabase not connected', true); return false; }
+      
+      const id = memberIdInput.value;
+      const data = {
+        name: cleanText(payload.name),
+        position: cleanText(payload.position),
+        role: payload.role || 'member',
+        bio: cleanText(payload.bio),
+        image_path: payload.image_path || null,
+        email: payload.email || null,
+        linkedin_url: payload.linkedin_url || null,
+        display_order: payload.display_order ?? 0,
+        is_active: payload.active,
+        updated_at: new Date().toISOString()
+      };
+      
+      try {
+        let result;
+        if (id) {
+          result = await supabase.from('team_members').update(data).eq('id', id);
+        } else {
+          result = await supabase.from('team_members').insert([data]);
+        }
+        
+        if (result.error) throw result.error;
+        showMessage(id ? '✓ Team member updated successfully' : '✓ Team member added successfully', false);
+        resetModal();
+        modal.setAttribute('aria-hidden', 'true');
+        modal.style.display = 'none';
+        await fetchTeamMembers();
+        return true;
+      } catch(err) {
+        showMessage(`✗ Save failed: ${err.message}`, true);
+        return false;
+      }
+    }
+    
+    function escapeHtml(str) { 
+      if (!str) return ''; 
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+    
+    // File upload handler
+    if (fileUpload) {
+      fileUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+          showMessage('Image too large (max 5MB)', true);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          imageInput.value = ev.target.result;
+          if (previewDiv) previewDiv.innerHTML = `<img src="${ev.target.result}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;" />`;
+          refreshIcons();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    
+    document.getElementById('modal-team-upload-btn')?.addEventListener('click', () => {
+      fileUpload.click();
+    });
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = {
+        name: nameInput.value.trim(),
+        position: positionInput.value.trim(),
+        role: roleSelect.value,
+        bio: bioInput.value.trim(),
+        image_path: imageInput.value.trim(),
+        email: emailInput.value.trim(),
+        linkedin_url: linkedinInput.value.trim(),
+        display_order: parseInt(orderInput.value, 10) || 0,
+        active: activeCheck.checked
+      };
+      
+      if (!formData.name) {
+        showMessage('Name is required', true);
+        nameInput.focus();
+        return;
+      }
+      if (!formData.position) {
+        showMessage('Position is required', true);
+        positionInput.focus();
+        return;
+      }
+      await saveTeamMember(formData);
+    });
+    
+    document.querySelectorAll('.modal-dismiss, .view-modal-dismiss, .delete-modal-dismiss').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.setAttribute('aria-hidden', 'true');
+        modal.style.display = 'none';
+        viewModal.setAttribute('aria-hidden', 'true');
+        viewModal.style.display = 'none';
+        deleteConfirmModal.setAttribute('aria-hidden', 'true');
+        deleteConfirmModal.style.display = 'none';
+        resetModal();
+        pendingDeleteId = null;
+      });
+    });
+    
+    document.getElementById('confirm-delete-btn')?.addEventListener('click', confirmDelete);
+    
+    document.getElementById('add-team-btn')?.addEventListener('click', () => {
+      if (!supabase) {
+        showMessage('Reconnecting to database...', false);
+        initializeSupabase();
+        return;
+      }
+      resetModal();
+      modal.setAttribute('aria-hidden', 'false');
+      modal.style.display = 'flex';
+      refreshIcons();
+    });
+    
+    async function initializeSupabase() {
+      updateConnectionStatus(false, 'Connecting...');
+      
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false }
+      });
+      
+      try {
+        const { error } = await supabase.from('team_members').select('count', { count: 'exact', head: true });
+        if (error && !error.message.includes('does not exist')) throw error;
+        
+        updateConnectionStatus(true);
+        await fetchTeamMembers();
+      } catch(err) {
+        updateConnectionStatus(false, err.message);
+        container.innerHTML = `<div class="error-placeholder">Connection error: ${err.message}</div>`;
+      }
+    }
+    
+    window.addEventListener('DOMContentLoaded', async () => {
+      const appShell = document.getElementById('app-shell');
+      if (appShell) appShell.classList.remove('app-hidden');
+      
+      if (typeof renderAdminSidebar === 'function') {
+        try { renderAdminSidebar('team'); } catch(e) { console.warn('Sidebar error:', e); }
+      }
+      
+      refreshIcons();
+      await initializeSupabase();
+    });
+  })();
+</script>
+</body>
+</html>

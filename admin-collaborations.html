@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="images/Admin-icon.jpg" id="favicon"> 
+  <title>Collaborations | IAL Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f5f7fb;
+      color: #1a1f2e;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .app-hidden {
+      visibility: hidden;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.2s;
+    }
+
+    .topbar {
+      background: white;
+      border-bottom: 1px solid #e4e9f2;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .topbar-left {
+      flex: 1;
+    }
+
+    .topbar-heading {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .topbar-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .topbar-heading h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #1e3a5f, #2d5b9e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .topbar-heading p {
+      color: #6c7a91;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .status-dot {
+      background: #e6f7e6;
+      color: #2b6e2f;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot.error {
+      background: #fee9e9;
+      color: #c2412c;
+    }
+
+    .status-dot.connecting {
+      background: #fff3e0;
+      color: #e67e22;
+    }
+
+    .page-content {
+      padding: 1.5rem 2rem;
+      flex: 1;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid #eef2f8;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #eef2f8;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #fafbfd;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1e3a5f;
+    }
+
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: #6c7a91;
+      margin-top: 0.25rem;
+    }
+
+    .add-btn {
+      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+    }
+
+    .save-msg {
+      font-size: 0.8rem;
+      margin-right: 1rem;
+      color: #10b981;
+    }
+
+    .collabs-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0;
+    }
+
+    .collab-item {
+      background: #ffffff;
+      border-bottom: 1px solid #eef2f8;
+      padding: 1rem 1.5rem;
+      transition: all 0.2s;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .collab-item:hover {
+      background: #fafcff;
+      transform: translateX(4px);
+    }
+
+    .collab-info {
+      flex: 4;
+    }
+
+    .collab-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .collab-title span {
+      font-size: 1rem;
+    }
+
+    .badge-active {
+      background: #e0f2e9;
+      color: #1c6e3f;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .badge-inactive {
+      background: #f1f3f5;
+      color: #5c6f87;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+
+    .collab-partner {
+      font-size: 0.8rem;
+      color: #6c7a91;
+      margin-top: 4px;
+    }
+
+    .collab-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #6c7a91;
+      transition: all 0.2s;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .icon-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .icon-btn.view-btn:hover {
+      background: #e6f7ff;
+      color: #0891b2;
+    }
+
+    .icon-btn.edit-btn:hover {
+      background: #eef2ff;
+      color: #1e3a5f;
+    }
+
+    .icon-btn.delete-btn:hover {
+      background: #fee9e9;
+      color: #dc2626;
+    }
+
+    /* Gallery Styles */
+    .gallery-container {
+      margin-top: 1.5rem;
+      border: 1px solid #eef2f8;
+      border-radius: 16px;
+      padding: 1.25rem;
+      background: #f8fafc;
+    }
+
+    .gallery-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1e3a5f;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #eef2f8;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .gallery-image-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #e2e8f0;
+      aspect-ratio: 1;
+      background: white;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .gallery-image-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      border-color: #1e3a5f;
+    }
+
+    .gallery-image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-gallery-image {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 28px;
+      height: 28px;
+      background: rgba(0,0,0,0.7);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      z-index: 2;
+    }
+
+    .remove-gallery-image:hover {
+      background: #dc2626;
+      transform: scale(1.1);
+    }
+
+    .add-gallery-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: white;
+      border: 2px solid #1e3a5f;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #1e3a5f;
+    }
+
+    .add-gallery-btn:hover {
+      background: #1e3a5f;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .gallery-limit-info {
+      font-size: 0.7rem;
+      color: #8a99b0;
+      margin-left: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Modal Styles */
+    .ial-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(4px);
+    }
+
+    .ial-modal[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .ial-modal__sheet {
+      background: white;
+      max-width: 700px;
+      width: 90%;
+      border-radius: 24px;
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.2);
+      animation: modalFadeIn 0.2s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .ial-modal__header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #eef2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 10;
+    }
+
+    .ial-modal__title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e3a5f;
+    }
+
+    .ial-modal__close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .ial-modal__close:hover {
+      background: #f1f5f9;
+      color: #1f2937;
+    }
+
+    .ial-modal__body {
+      padding: 1.5rem;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field label {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .field input, .field textarea {
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .field input:focus, .field textarea:focus {
+      outline: none;
+      border-color: #1e3a5f;
+      box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-upload {
+      margin-top: 0.5rem;
+      background: #f1f5f9;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-upload:hover {
+      background: #e2e8f0;
+      border-color: #1e3a5f;
+    }
+
+    .img-preview {
+      margin-top: 10px;
+      width: 100px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .img-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ial-modal__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eef2f8;
+    }
+
+    .btn {
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
+      color: white;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+    }
+
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    .btn-cancel:hover {
+      background: #e2e8f0;
+    }
+
+    .loading-placeholder {
+      padding: 2rem;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    .empty-state {
+      padding: 3rem;
+      text-align: center;
+      color: #94a3b8;
+    }
+  </style>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <link rel="stylesheet" href="css/admin-sidebar.css"/>
+  <link rel="stylesheet" href="css/admin-icons.css"/>
+  <script>
+    if (localStorage.getItem('adminLoggedIn') !== 'true') {
+      location.replace('admin-login.html');
+    }
+  </script>
+</head>
+<body>
+<div id="app-shell" class="app app-hidden">
+  <div id="admin-sidebar-root"></div>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-heading">
+          <span class="topbar-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.41" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+          </span>
+          <div>
+            <h2>Collaborations</h2>
+            <p>Manage partnerships with image gallery</p>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="connection-status" class="status-dot">Connecting...</span>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Partnership Records</div>
+            <div class="card-subtitle">Manage international partnerships, MOUs, and collaborative projects</div>
+          </div>
+          <div>
+            <span id="collab-msg" class="save-msg"></span>
+            <button class="add-btn" id="add-collab-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              New Collaboration
+            </button>
+          </div>
+        </div>
+        <div id="collaborations-list">
+          <div class="loading-placeholder">Loading collaborations...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="collab-modal" class="ial-modal" aria-hidden="true">
+  <div class="ial-modal__sheet">
+    <div class="ial-modal__header">
+      <h3 id="collab-modal-title" class="ial-modal__title">Add Collaboration</h3>
+      <button class="ial-modal__close modal-dismiss">&times;</button>
+    </div>
+    <div class="ial-modal__body">
+      <form id="collab-modal-form">
+        <input type="hidden" id="modal-collab-id">
+        <div class="form-grid">
+          <div class="form-cols-2">
+            <div class="field">
+              <label>Title *</label>
+              <input type="text" id="modal-collab-title" required placeholder="e.g., MOA with Universiti Malaya">
+            </div>
+            <div class="field">
+              <label>Partner Institution</label>
+              <input type="text" id="modal-collab-partner" placeholder="Organization name">
+            </div>
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea id="modal-collab-description" rows="3" placeholder="Partnership summary..."></textarea>
+          </div>
+          <div class="form-cols-2">
+            <div class="field">
+              <label>Main Image</label>
+              <input type="text" id="modal-collab-image" placeholder="Image URL">
+              <button type="button" class="btn-upload" id="modal-collab-upload-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="8" r="4"/></svg>
+                Upload
+              </button>
+              <input type="file" id="modal-collab-file" hidden accept="image/*">
+              <div id="modal-collab-preview" class="img-preview"></div>
+            </div>
+            <div class="field">
+              <label>Project URL</label>
+              <input type="url" id="modal-collab-url" placeholder="https://...">
+            </div>
+            <div class="field">
+              <label>Display Order</label>
+              <input type="number" id="modal-collab-order" value="0" min="0">
+            </div>
+            <div class="field">
+              <label class="checkbox-row">
+                <input type="checkbox" id="modal-collab-active" checked> Active on public site
+              </label>
+            </div>
+          </div>
+          <div class="form-cols-2">
+            <div class="field">
+              <label>Start Date</label>
+              <input type="date" id="modal-start-date">
+            </div>
+            <div class="field">
+              <label>End Date</label>
+              <input type="date" id="modal-end-date">
+            </div>
+          </div>
+
+          <!-- Gallery -->
+          <div class="gallery-container">
+            <div class="gallery-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="2.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Gallery Images
+              <span class="gallery-limit-info">Max 5 images</span>
+            </div>
+            <div id="gallery-grid" class="gallery-grid"></div>
+            <input type="file" id="gallery-file-input" hidden accept="image/*" multiple>
+            <button type="button" class="add-gallery-btn" id="add-gallery-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Add Images
+            </button>
+          </div>
+        </div>
+        <div class="ial-modal__actions">
+          <button type="submit" class="btn btn-save">Save Collaboration</button>
+          <button type="button" class="btn btn-cancel modal-dismiss">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/admin-sidebar.js"></script>
+<script>
+  (function() {
+    const SUPABASE_URL = 'https://wxcybeaafimxjhbhblzg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
+    const MAX_GALLERY_IMAGES = 5;
+    
+    let supabase = null;
+    let currentGalleryImages = [];
+    let currentCollabId = null;
+    
+    const container = document.getElementById('collaborations-list');
+    const modal = document.getElementById('collab-modal');
+    const titleInput = document.getElementById('modal-collab-title');
+    const partnerInput = document.getElementById('modal-collab-partner');
+    const descInput = document.getElementById('modal-collab-description');
+    const imageInput = document.getElementById('modal-collab-image');
+    const urlInput = document.getElementById('modal-collab-url');
+    const orderInput = document.getElementById('modal-collab-order');
+    const activeCheck = document.getElementById('modal-collab-active');
+    const startDateInput = document.getElementById('modal-start-date');
+    const endDateInput = document.getElementById('modal-end-date');
+    const fileUpload = document.getElementById('modal-collab-file');
+    const previewDiv = document.getElementById('modal-collab-preview');
+    const msgSpan = document.getElementById('collab-msg');
+    const statusSpan = document.getElementById('connection-status');
+    const galleryGrid = document.getElementById('gallery-grid');
+    const galleryFileInput = document.getElementById('gallery-file-input');
+    const addGalleryBtn = document.getElementById('add-gallery-btn');
+    
+    function showMessage(msg, isError = false) {
+      if (msgSpan) {
+        msgSpan.textContent = msg;
+        msgSpan.style.color = isError ? '#dc2626' : '#10b981';
+        setTimeout(() => { if(msgSpan) msgSpan.textContent = ''; }, 3000);
+      }
+    }
+    
+    function updateConnectionStatus(connected, message = '') {
+      if (statusSpan) {
+        if (connected) {
+          statusSpan.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg> Connected';
+          statusSpan.className = 'status-dot';
+        } else {
+          statusSpan.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${message || 'Disconnected'}`;
+          statusSpan.className = 'status-dot error';
+        }
+      }
+    }
+    
+    function escapeHtml(str) { 
+      if (!str) return ''; 
+      return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
+    
+    function assetURL(path) {
+      if (!path) return '';
+      if (/^(https?:|data:|blob:|images\/|\.\/|\/)/i.test(path)) return path;
+      return `${SUPABASE_URL}/storage/v1/object/public/${path.replace(/^\/+/, '')}`;
+    }
+    
+    function renderGallery() {
+      if (!galleryGrid) return;
+      if (currentGalleryImages.length === 0) {
+        galleryGrid.innerHTML = '<div style="color:#94a3b8; font-size:0.85rem; padding:1rem; text-align:center; background:white; border-radius:12px; border:1px dashed #cbd5e1;">No images yet. Add up to 5 photos.</div>';
+        return;
+      }
+      galleryGrid.innerHTML = currentGalleryImages.map((img, index) => `
+        <div class="gallery-image-item">
+          <img src="${escapeHtml(img)}" alt="Gallery ${index + 1}">
+          <button class="remove-gallery-image" data-index="${index}" title="Remove">×</button>
+        </div>
+      `).join('');
+      document.querySelectorAll('.remove-gallery-image').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const idx = parseInt(btn.dataset.index);
+          currentGalleryImages.splice(idx, 1);
+          renderGallery();
+        });
+      });
+    }
+    
+    async function uploadImageToStorage(file, folder) {
+      const ext = file.name.split('.').pop();
+      const name = `${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
+      const path = `${folder}/${name}`;
+      try {
+        const { error } = await supabase.storage.from('collaboration-assets').upload(path, file);
+        if (error) throw error;
+        const { data: { publicUrl } } = supabase.storage.from('collaboration-assets').getPublicUrl(path);
+        return publicUrl;
+      } catch (err) { console.error(err); return null; }
+    }
+    
+    async function uploadGalleryImages(files) {
+      const remaining = MAX_GALLERY_IMAGES - currentGalleryImages.length;
+      if (files.length > remaining) {
+        showMessage(`Max ${MAX_GALLERY_IMAGES} images. You can add ${remaining} more.`, true);
+        return [];
+      }
+      const urls = [];
+      for (const f of files) {
+        if (f.size > 5*1024*1024) { showMessage(`${f.name} too large (max 5MB)`, true); continue; }
+        if (!f.type.startsWith('image/')) { showMessage(`${f.name} not an image`, true); continue; }
+        const url = await uploadImageToStorage(f, 'galleries');
+        if (url) urls.push(url);
+      }
+      return urls;
+    }
+    
+    async function loadGalleryImages(collabId) {
+      if (!collabId) { currentGalleryImages = []; renderGallery(); return; }
+      const { data, error } = await supabase.from('collab_gallery').select('image_url').eq('collaboration_id', collabId).order('display_order');
+      if (!error && data) currentGalleryImages = data.map(d => d.image_url);
+      else currentGalleryImages = [];
+      renderGallery();
+    }
+    
+    async function saveGalleryImages(collabId, images) {
+      if (!collabId) return;
+      await supabase.from('collab_gallery').delete().eq('collaboration_id', collabId);
+      if (images.length) {
+        const galleryData = images.map((url, i) => ({ collaboration_id: collabId, image_url: url, display_order: i }));
+        await supabase.from('collab_gallery').insert(galleryData);
+      }
+    }
+    
+    async function fetchCollaborations() {
+      const { data, error } = await supabase.from('collaborations').select('*').order('display_order').order('created_at', { ascending: false });
+      if (error) throw error;
+      if (!data || !data.length) { container.innerHTML = '<div class="empty-state">✨ No collaborations yet. Click "New Collaboration" to start.</div>'; return; }
+      container.innerHTML = `<div class="collabs-grid">${data.map(c => `
+        <div class="collab-item" data-id="${c.id}">
+          <div class="collab-info">
+            <div class="collab-title">
+              <span>${escapeHtml(c.title)}</span>
+              ${c.is_active ? '<span class="badge-active">active</span>' : '<span class="badge-inactive">inactive</span>'}
+              <span style="font-size:0.7rem; background:#f0f2f5; padding:0.1rem 0.5rem; border-radius:20px;">order: ${c.display_order || 0}</span>
+            </div>
+            <div class="collab-partner">🤝 ${escapeHtml(c.partner_name || '—')}</div>
+          </div>
+          <div class="collab-actions">
+            <button class="icon-btn edit-btn" data-id="${c.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3l4 4-7 7H10v-4l7-7z"/><path d="M4 20h16"/></svg> Edit</button>
+            <button class="icon-btn delete-btn" data-id="${c.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Delete</button>
+          </div>
+        </div>
+      `).join('')}</div>`;
+      document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', () => openEditModal(btn.dataset.id, data)));
+      document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', async () => {
+        if (confirm('Delete this collaboration?')) await deleteCollaboration(btn.dataset.id);
+      }));
+    }
+    
+    async function openEditModal(id, collabs) {
+      const collab = collabs?.find(c => c.id === id) || await supabase.from('collaborations').select('*').eq('id', id).single().then(r => r.data);
+      if (!collab) return;
+      currentCollabId = collab.id;
+      document.getElementById('modal-collab-id').value = collab.id;
+      titleInput.value = collab.title || '';
+      partnerInput.value = collab.partner_name || '';
+      descInput.value = collab.description || '';
+      imageInput.value = collab.image_path || '';
+      urlInput.value = collab.project_url || '';
+      orderInput.value = collab.display_order ?? 0;
+      activeCheck.checked = collab.is_active !== false;
+      startDateInput.value = collab.start_date || '';
+      endDateInput.value = collab.end_date || '';
+      if (collab.image_path) previewDiv.innerHTML = `<img src="${assetURL(collab.image_path)}">`;
+      else previewDiv.innerHTML = '';
+      await loadGalleryImages(collab.id);
+      document.getElementById('collab-modal-title').innerText = 'Edit Collaboration';
+      modal.setAttribute('aria-hidden', 'false');
+      modal.style.display = 'flex';
+    }
+    
+    async function deleteCollaboration(id) {
+      await supabase.from('collab_gallery').delete().eq('collaboration_id', id);
+      const { error } = await supabase.from('collaborations').delete().eq('id', id);
+      if (!error) { showMessage('Deleted successfully'); fetchCollaborations(); }
+      else showMessage('Delete failed', true);
+    }
+    
+    function resetModal() {
+      document.getElementById('collab-modal-form').reset();
+      document.getElementById('modal-collab-id').value = '';
+      previewDiv.innerHTML = '';
+      currentGalleryImages = [];
+      renderGallery();
+      document.getElementById('collab-modal-title').innerText = 'Add Collaboration';
+    }
+    
+    async function saveCollaboration(data) {
+      const id = document.getElementById('modal-collab-id').value;
+      const payload = {
+        title: data.title, partner_name: data.partner_name || null, description: data.description || null,
+        image_path: data.image_path || null, project_url: data.project_url || null,
+        display_order: data.display_order || 0, is_active: data.active,
+        start_date: data.start_date || null, end_date: data.end_date || null,
+        updated_at: new Date().toISOString()
+      };
+      let result;
+      if (id) result = await supabase.from('collaborations').update(payload).eq('id', id);
+      else result = await supabase.from('collaborations').insert([payload]);
+      if (result.error) throw result.error;
+      const newId = id || result.data?.[0]?.id;
+      if (newId && currentGalleryImages.length) await saveGalleryImages(newId, currentGalleryImages);
+      showMessage(id ? 'Updated successfully' : 'Added successfully');
+      resetModal(); modal.setAttribute('aria-hidden', 'true'); modal.style.display = 'none';
+      fetchCollaborations();
+    }
+    
+    fileUpload?.addEventListener('change', e => {
+      const f = e.target.files[0];
+      if (f) {
+        if (f.size > 5*1024*1024) { showMessage('Image too large', true); return; }
+        const r = new FileReader();
+        r.onload = ev => { imageInput.value = ev.target.result; previewDiv.innerHTML = `<img src="${ev.target.result}">`; };
+        r.readAsDataURL(f);
+      }
+    });
+    document.getElementById('modal-collab-upload-btn')?.addEventListener('click', () => fileUpload.click());
+    
+    addGalleryBtn?.addEventListener('click', () => {
+      if (currentGalleryImages.length >= MAX_GALLERY_IMAGES) { showMessage(`Max ${MAX_GALLERY_IMAGES} images`, true); return; }
+      galleryFileInput.click();
+    });
+    galleryFileInput?.addEventListener('change', async e => {
+      const files = Array.from(e.target.files);
+      if (!files.length) return;
+      const remaining = MAX_GALLERY_IMAGES - currentGalleryImages.length;
+      if (files.length > remaining) { showMessage(`Can only add ${remaining} more`, true); galleryFileInput.value = ''; return; }
+      showMessage('Uploading...');
+      const urls = await uploadGalleryImages(files);
+      currentGalleryImages.push(...urls);
+      renderGallery();
+      galleryFileInput.value = '';
+      if (urls.length) showMessage(`${urls.length} image(s) uploaded`);
+    });
+    
+    document.getElementById('collab-modal-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = {
+        title: titleInput.value.trim(), partner_name: partnerInput.value.trim(),
+        description: descInput.value.trim(), image_path: imageInput.value.trim(),
+        project_url: urlInput.value.trim(), display_order: parseInt(orderInput.value) || 0,
+        active: activeCheck.checked, start_date: startDateInput.value || null,
+        end_date: endDateInput.value || null
+      };
+      if (!formData.title) { showMessage('Title required', true); return; }
+      await saveCollaboration(formData);
+    });
+    
+    document.querySelectorAll('.modal-dismiss').forEach(btn => {
+      btn.addEventListener('click', () => { modal.setAttribute('aria-hidden', 'true'); modal.style.display = 'none'; resetModal(); });
+    });
+    document.getElementById('add-collab-btn')?.addEventListener('click', () => { resetModal(); modal.setAttribute('aria-hidden', 'false'); modal.style.display = 'flex'; });
+    
+    async function init() {
+      document.getElementById('app-shell').classList.remove('app-hidden');
+      if (typeof renderAdminSidebar === 'function') try { renderAdminSidebar('collaborations'); } catch(e) {}
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+      updateConnectionStatus(false, 'Connecting...');
+      try {
+        await supabase.from('collaborations').select('count', { count: 'exact', head: true });
+        updateConnectionStatus(true);
+        await fetchCollaborations();
+      } catch(err) { updateConnectionStatus(false, err.message); container.innerHTML = `<div class="empty-state">⚠️ Connection error: ${err.message}</div>`; }
+    }
+    init();
+  })();
+</script>
+</body>
+</html>

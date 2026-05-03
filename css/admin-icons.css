@@ -1,0 +1,97 @@
+/* Inline SVG icons (stroke inherits currentColor) */
+.icon {
+  display: block;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.btn .icon,
+.add-btn .icon,
+.btn-upload .icon,
+.btn-primary .icon {
+  width: 1em;
+  height: 1em;
+}
+
+.icon--sm {
+  width: 14px;
+  height: 14px;
+}
+
+/* Form sections (fieldset replaces ad-hoc margins) */
+.form-section {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.form-section + .form-section {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+
+.form-section__legend {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  padding: 0;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.field-textarea--compact {
+  min-height: 72px;
+}
+
+.field label abbr {
+  text-decoration: none;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.btn-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Modal footer actions */
+.ial-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.ial-modal__actions .btn-save,
+.ial-modal__actions .btn-cancel {
+  min-width: 120px;
+}
+
+.list-row-actions .btn {
+  gap: 6px;
+}
+
+.topbar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.topbar-icon .icon {
+  width: 18px;
+  height: 18px;
+}

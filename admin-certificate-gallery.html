@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="images/Admin-icon.jpg" id="favicon"> 
+  <title>Certificate Gallery | IAL Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f4f6fa;
+      color: #1a1f2e;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .app-hidden {
+      visibility: hidden;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background: white;
+      border-bottom: 1px solid #e4e9f2;
+      padding: 1rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .topbar-left {
+      flex: 1;
+    }
+
+    .topbar-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .topbar-icon {
+      color: #2c3e66;
+    }
+
+    .topbar-heading h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .topbar-heading p {
+      color: #5a6874;
+      font-size: 0.875rem;
+      margin-top: 0.125rem;
+    }
+
+    .status-dot {
+      background: #e6f7e6;
+      color: #2b6e2f;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot.error {
+      background: #fee9e9;
+      color: #c2412c;
+    }
+
+    .status-dot.connecting {
+      background: #fff3e0;
+      color: #e67e22;
+    }
+
+    .page-content {
+      padding: 1.5rem 2rem;
+      flex: 1;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+      border: 1px solid #edf2f7;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #eef2f8;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: #5d6e85;
+      margin-top: 4px;
+    }
+
+    .add-btn {
+      background: #1e3a5f;
+      border: none;
+      color: white;
+      font-weight: 500;
+      padding: 0.5rem 1.1rem;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background 0.2s;
+    }
+
+    .add-btn:hover {
+      background: #0f2b48;
+    }
+
+    .save-msg {
+      font-size: 0.8rem;
+      margin-right: 1rem;
+      color: #2c7a4d;
+    }
+
+    .certificates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .certificate-card {
+      background: white;
+      border: 1px solid #eef2f8;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .certificate-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .certificate-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #f8fafc;
+    }
+
+    .certificate-info {
+      padding: 1.25rem;
+    }
+
+    .certificate-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #1e3a5f;
+      margin-bottom: 0.5rem;
+    }
+
+    .certificate-description {
+      font-size: 0.85rem;
+      color: #6c7e97;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .certificate-date {
+      font-size: 0.75rem;
+      color: #8a99b0;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .certificate-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #eef2f8;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-view {
+      color: #0891b2;
+    }
+
+    .btn-view:hover {
+      background: #e6f7ff;
+      color: #0e7c9e;
+    }
+
+    .btn-edit {
+      color: #1e3a5f;
+    }
+
+    .btn-delete {
+      color: #dc2626;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .badge-active {
+      background: #e0f2e9;
+      color: #1c6e3f;
+    }
+
+    .badge-inactive {
+      background: #f1f3f5;
+      color: #5c6f87;
+    }
+
+    /* Pagination */
+    .pagination-container {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eef2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #fafbfd;
+    }
+
+    .pagination-info {
+      font-size: 0.8rem;
+      color: #6c7a91;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pagination-buttons {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .page-btn {
+      background: white;
+      border: 1px solid #e2e8f0;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      color: #475569;
+      min-width: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background: #1e3a5f;
+      color: white;
+      border-color: #1e3a5f;
+    }
+
+    .page-btn.active {
+      background: #1e3a5f;
+      color: white;
+      border-color: #1e3a5f;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Modal Styles */
+    .ial-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(3px);
+    }
+
+    .ial-modal[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .ial-modal__sheet {
+      background: white;
+      max-width: 600px;
+      width: 90%;
+      border-radius: 24px;
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .ial-modal__header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #eef2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ial-modal__title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ial-modal__close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8394aa;
+      padding: 4px;
+      border-radius: 8px;
+      transition: background 0.2s;
+      font-size: 1.5rem;
+    }
+
+    .ial-modal__close:hover {
+      background: #f1f5f9;
+      color: #1f2937;
+    }
+
+    .ial-modal__body {
+      padding: 1.5rem;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .field label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #2c3e50;
+    }
+
+    .field input, .field textarea, .field select {
+      padding: 0.7rem 0.9rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      outline: none;
+      border-color: #1e3a5f;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+
+    .img-preview {
+      margin-top: 10px;
+      width: 100%;
+      max-height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .img-preview img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .btn-upload {
+      margin-top: 0.5rem;
+      background: #f1f5f9;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .ial-modal__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eef2f8;
+    }
+
+    .btn {
+      padding: 0.6rem 1.3rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-save {
+      background: #1e3a5f;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background: #0f2b48;
+    }
+
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #8a99b0;
+    }
+
+    .loading-placeholder {
+      text-align: center;
+      padding: 2rem;
+      color: #6c7e97;
+    }
+
+    .view-mode .field input,
+    .view-mode .field textarea,
+    .view-mode .btn-upload,
+    .view-mode input[type="checkbox"] {
+      pointer-events: none;
+      background: #f9fafb;
+      border-color: #e2e8f0;
+    }
+
+    .view-mode .btn-upload {
+      display: none;
+    }
+
+    .view-badge {
+      background: #eef2ff;
+      color: #1e3a5f;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+  </style>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <link rel="stylesheet" href="css/admin-sidebar.css"/>
+  <link rel="stylesheet" href="css/admin-icons.css"/>
+  <script>
+    if (localStorage.getItem('adminLoggedIn') !== 'true') {
+      location.replace('admin-login.html');
+    }
+  </script>
+</head>
+<body>
+<div id="app-shell" class="app app-hidden">
+  <div id="admin-sidebar-root"></div>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-heading">
+          <span class="topbar-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="2.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </span>
+          <div>
+            <h2>Certificate Gallery</h2>
+            <p>Manage certificates and awards</p>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right"><span id="connection-status" class="status-dot connecting">Connecting...</span></div>
+    </div>
+
+    <div class="page-content">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Certificates & Awards</div>
+            <div class="card-subtitle">Manage certificates, recognitions, and achievements</div>
+          </div>
+          <div class="card-header-actions">
+            <span id="cert-msg" class="save-msg"></span>
+            <button type="button" class="add-btn" id="add-cert-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              <span>Add Certificate</span>
+            </button>
+          </div>
+        </div>
+        <div id="certificates-list" class="certificates-grid">
+          <div class="loading-placeholder">Loading certificates...</div>
+        </div>
+        <div id="pagination-container" class="pagination-container" style="display: none;">
+          <div class="pagination-info">
+            Showing <span id="showing-start">0</span> - <span id="showing-end">0</span> of <span id="total-items">0</span> certificates
+          </div>
+          <div class="pagination-buttons" id="pagination-buttons"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="cert-modal" class="ial-modal" aria-hidden="true">
+  <div class="ial-modal__sheet">
+    <div class="ial-modal__header">
+      <h3 id="cert-modal-title" class="ial-modal__title">Add Certificate</h3>
+      <button type="button" class="ial-modal__close modal-dismiss">&times;</button>
+    </div>
+    <div class="ial-modal__body">
+      <form id="cert-form">
+        <input type="hidden" id="cert-id">
+        <div class="form-grid">
+          <div class="field">
+            <label>Title *</label>
+            <input type="text" id="cert-title" required placeholder="e.g., Certificate of Excellence">
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea id="cert-description" rows="3" placeholder="Brief description of the certificate or award"></textarea>
+          </div>
+          <div class="form-cols-2">
+            <div class="field">
+              <label>Issued Date</label>
+              <input type="date" id="cert-date">
+            </div>
+            <div class="field">
+              <label>Display Order</label>
+              <input type="number" id="cert-order" value="0" min="0">
+            </div>
+          </div>
+          <div class="field">
+            <label>Certificate URL (optional)</label>
+            <input type="url" id="cert-url" placeholder="https://example.com/certificate">
+          </div>
+          <div class="field">
+            <label>Certificate Image *</label>
+            <input type="text" id="cert-image" placeholder="Image URL or upload">
+            <button type="button" class="btn-upload" id="cert-upload-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="8" r="4"/></svg>
+              Upload Image
+            </button>
+            <input type="file" id="cert-file" hidden accept="image/*">
+            <div id="cert-preview" class="img-preview"></div>
+          </div>
+          <div class="field">
+            <label class="checkbox-row">
+              <input type="checkbox" id="cert-active" checked>
+              <span>Show on public site (active)</span>
+            </label>
+          </div>
+        </div>
+        <div class="ial-modal__actions">
+          <button type="submit" class="btn btn-save">Save Certificate</button>
+          <button type="button" class="btn btn-cancel modal-dismiss">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- View Details Modal -->
+<div id="view-modal" class="ial-modal" aria-hidden="true">
+  <div class="ial-modal__sheet">
+    <div class="ial-modal__header">
+      <h3 class="ial-modal__title">👁️ Certificate Details <span class="view-badge">Read-only</span></h3>
+      <button type="button" class="ial-modal__close view-modal-close">&times;</button>
+    </div>
+    <div class="ial-modal__body">
+      <div class="form-grid" id="view-details-container"></div>
+      <div class="ial-modal__actions">
+        <button type="button" class="btn btn-cancel view-modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/admin-sidebar.js"></script>
+<script>
+  (function() {
+    const SUPABASE_URL = 'https://wxcybeaafimxjhbhblzg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
+    const ITEMS_PER_PAGE = 6;
+    
+    let supabase = null;
+    let allCertificates = [];
+    let currentPage = 1;
+    let totalPages = 1;
+    
+    const container = document.getElementById('certificates-list');
+    const msgSpan = document.getElementById('cert-msg');
+    const statusSpan = document.getElementById('connection-status');
+    const paginationContainer = document.getElementById('pagination-container');
+    const paginationButtons = document.getElementById('pagination-buttons');
+    const viewModal = document.getElementById('view-modal');
+    
+    function showMessage(msg, isError = false) {
+      if (msgSpan) {
+        msgSpan.textContent = msg;
+        msgSpan.style.color = isError ? '#c2412c' : '#2b6e2f';
+        setTimeout(() => { if(msgSpan) msgSpan.textContent = ''; }, 3000);
+      }
+    }
+    
+    function updateConnectionStatus(connected, message = '') {
+      if (statusSpan) {
+        if (connected) {
+          statusSpan.innerHTML = 'Connected';
+          statusSpan.className = 'status-dot';
+        } else {
+          statusSpan.innerHTML = message || 'Disconnected';
+          statusSpan.className = 'status-dot error';
+        }
+      }
+    }
+    
+    function assetURL(path) {
+      if (!path) return '';
+      if (/^(https?:|data:|blob:|images\/|\.\/|\/)/i.test(path)) return path;
+      return `${SUPABASE_URL}/storage/v1/object/public/${path.replace(/^\/+/, '')}`;
+    }
+    
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+    
+    function formatDateForDisplay(dateStr) {
+      if (!dateStr) return '—';
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+    
+    function openViewModal(cert) {
+      const containerDiv = document.getElementById('view-details-container');
+      const imageUrl = cert.image_path ? assetURL(cert.image_path) : '';
+      const statusText = cert.is_active ? '<span class="badge-active">Active</span>' : '<span class="badge-inactive">Inactive</span>';
+      
+      containerDiv.innerHTML = `
+        <div class="field">
+          <label>Title</label>
+          <div style="padding:0.7rem 1rem; background:#f9fafb; border-radius:12px; border:1px solid #e2e8f0; font-weight:500;">${escapeHtml(cert.title || '—')}</div>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <div style="padding:0.7rem 1rem; background:#f9fafb; border-radius:12px; border:1px solid #e2e8f0; white-space:pre-wrap;">${escapeHtml(cert.description || 'No description')}</div>
+        </div>
+        <div class="form-cols-2">
+          <div class="field">
+            <label>Issued Date</label>
+            <div style="padding:0.7rem 1rem; background:#f9fafb; border-radius:12px;">${formatDateForDisplay(cert.issued_date)}</div>
+          </div>
+          <div class="field">
+            <label>Display Order</label>
+            <div style="padding:0.7rem 1rem; background:#f9fafb; border-radius:12px;">${cert.display_order ?? 0}</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Certificate URL</label>
+          <div style="padding:0.7rem 1rem; background:#f9fafb; border-radius:12px; word-break:break-all;">${cert.certificate_url ? `<a href="${escapeHtml(cert.certificate_url)}" target="_blank" style="color:#1e3a5f;">${escapeHtml(cert.certificate_url)}</a>` : '—'}</div>
+        </div>
+        <div class="field">
+          <label>Certificate Image</label>
+          ${imageUrl ? `<div style="margin-top:6px;"><img src="${imageUrl}" style="max-width:100%; max-height:200px; border-radius:12px; border:1px solid #e2e8f0;"></div>` : '<div style="padding:0.7rem 1rem; background:#f9fafb; border-radius:12px;">No image</div>'}
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <div style="padding:0.7rem 1rem; background:#f9fafb; border-radius:12px;">${statusText}</div>
+        </div>
+      `;
+      viewModal.setAttribute('aria-hidden', 'false');
+      viewModal.style.display = 'flex';
+    }
+    
+    function renderPagination() {
+      if (!allCertificates.length) {
+        paginationContainer.style.display = 'none';
+        return;
+      }
+      
+      paginationContainer.style.display = 'flex';
+      const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+      const end = Math.min(currentPage * ITEMS_PER_PAGE, allCertificates.length);
+      document.getElementById('showing-start').textContent = start;
+      document.getElementById('showing-end').textContent = end;
+      document.getElementById('total-items').textContent = allCertificates.length;
+      
+      let buttonsHtml = '';
+      buttonsHtml += `<button class="page-btn" id="prev-page" ${currentPage === 1 ? 'disabled' : ''}>←</button>`;
+      
+      const maxVisible = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+      if (endPage - startPage + 1 < maxVisible) {
+        startPage = Math.max(1, endPage - maxVisible + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        buttonsHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+      }
+      
+      buttonsHtml += `<button class="page-btn" id="next-page" ${currentPage === totalPages ? 'disabled' : ''}>→</button>`;
+      
+      paginationButtons.innerHTML = buttonsHtml;
+      
+      document.getElementById('prev-page')?.addEventListener('click', () => {
+        if (currentPage > 1) goToPage(currentPage - 1);
+      });
+      document.getElementById('next-page')?.addEventListener('click', () => {
+        if (currentPage < totalPages) goToPage(currentPage + 1);
+      });
+      document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => goToPage(parseInt(btn.dataset.page)));
+      });
+    }
+    
+    function goToPage(page) {
+      currentPage = page;
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE;
+      const pageData = allCertificates.slice(start, end);
+      renderCertificatesList(pageData);
+      renderPagination();
+    }
+    
+    function renderCertificatesList(certs) {
+      if (!certs.length) {
+        container.innerHTML = '<div class="empty-state">No certificates found.</div>';
+        return;
+      }
+      
+      container.innerHTML = certs.map(cert => `
+        <div class="certificate-card">
+          <img class="certificate-image" src="${assetURL(cert.image_path)}" alt="${escapeHtml(cert.title)}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'%238a99b0\'%3E%3Cpath d=\'M4 16l4-4 4 4 4-4 4 4V4H4v12z\'/%3E%3C/svg%3E'">
+          <div class="certificate-info">
+            <div class="certificate-title">${escapeHtml(cert.title)}</div>
+            <div class="certificate-description">${escapeHtml(cert.description || 'No description')}</div>
+            ${cert.issued_date ? `<div class="certificate-date">📅 ${formatDateForDisplay(cert.issued_date)}</div>` : ''}
+            <div style="margin-top: 0.5rem;">
+              <span class="badge ${cert.is_active ? 'badge-active' : 'badge-inactive'}">${cert.is_active ? 'Active' : 'Inactive'}</span>
+              <span style="font-size: 0.7rem; color: #8a99b0; margin-left: 0.5rem;">Order: ${cert.display_order || 0}</span>
+            </div>
+            <div class="certificate-actions">
+              <button class="btn-icon btn-view" data-id="${cert.id}">👁️ View</button>
+              <button class="btn-icon btn-edit" data-id="${cert.id}">✏️ Edit</button>
+              <button class="btn-icon btn-delete" data-id="${cert.id}">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      document.querySelectorAll('.btn-view').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const cert = allCertificates.find(c => c.id === id);
+          if (cert) openViewModal(cert);
+        });
+      });
+      
+      document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', () => editCertificate(btn.getAttribute('data-id')));
+      });
+      
+      document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', () => deleteCertificate(btn.getAttribute('data-id')));
+      });
+    }
+    
+    async function editCertificate(id) {
+      const cert = allCertificates.find(c => c.id === id);
+      if (!cert) return;
+      
+      editingId = cert.id;
+      document.getElementById('cert-id').value = cert.id;
+      document.getElementById('cert-title').value = cert.title || '';
+      document.getElementById('cert-description').value = cert.description || '';
+      document.getElementById('cert-date').value = cert.issued_date || '';
+      document.getElementById('cert-order').value = cert.display_order || 0;
+      document.getElementById('cert-url').value = cert.certificate_url || '';
+      document.getElementById('cert-image').value = cert.image_path || '';
+      document.getElementById('cert-active').checked = cert.is_active !== false;
+      document.getElementById('cert-modal-title').innerHTML = '✏️ Edit Certificate';
+      
+      const preview = document.getElementById('cert-preview');
+      if (cert.image_path) {
+        preview.innerHTML = `<img src="${assetURL(cert.image_path)}" alt="Preview">`;
+      } else {
+        preview.innerHTML = '';
+      }
+      
+      document.getElementById('cert-modal').setAttribute('aria-hidden', 'false');
+      document.getElementById('cert-modal').style.display = 'flex';
+    }
+    
+    async function deleteCertificate(id) {
+      if (!confirm('Delete this certificate? This action cannot be undone.')) return;
+      
+      const { error } = await supabase.from('certificates').delete().eq('id', id);
+      if (error) {
+        showMessage('Delete failed: ' + error.message, true);
+      } else {
+        showMessage('Certificate deleted', false);
+        await loadAllCertificates();
+      }
+    }
+    
+    async function uploadImageToStorage(file) {
+      if (!file) return null;
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `certificates/${fileName}`;
+      
+      try {
+        const { error } = await supabase.storage
+          .from('certificate-assets')
+          .upload(filePath, file);
+        
+        if (error) throw error;
+        
+        const { data: { publicUrl } } = supabase.storage
+          .from('certificate-assets')
+          .getPublicUrl(filePath);
+        
+        return publicUrl;
+      } catch (error) {
+        console.error('Upload error:', error);
+        return null;
+      }
+    }
+    
+    async function loadAllCertificates() {
+      if (!supabase) return;
+      
+      const { data, error } = await supabase
+        .from('certificates')
+        .select('*')
+        .order('display_order', { ascending: true })
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error loading certificates:', error);
+        container.innerHTML = `<div class="empty-state">Error loading certificates: ${error.message}</div>`;
+        paginationContainer.style.display = 'none';
+        return;
+      }
+      
+      allCertificates = data || [];
+      totalPages = Math.ceil(allCertificates.length / ITEMS_PER_PAGE);
+      currentPage = 1;
+      
+      if (allCertificates.length === 0) {
+        container.innerHTML = '<div class="empty-state">No certificates yet. Click "Add Certificate" to get started.</div>';
+        paginationContainer.style.display = 'none';
+        return;
+      }
+      
+      const start = 0;
+      const end = ITEMS_PER_PAGE;
+      const pageData = allCertificates.slice(start, end);
+      renderCertificatesList(pageData);
+      renderPagination();
+    }
+    
+    async function initializeSupabase() {
+      updateConnectionStatus(false, 'Connecting...');
+      
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false }
+      });
+      
+      try {
+        const { error } = await supabase.from('certificates').select('count', { count: 'exact', head: true });
+        if (error && !error.message.includes('does not exist')) throw error;
+        
+        updateConnectionStatus(true);
+        await loadAllCertificates();
+      } catch (err) {
+        updateConnectionStatus(false, err.message);
+        container.innerHTML = `<div class="empty-state">Connection Error: ${err.message}</div>`;
+        paginationContainer.style.display = 'none';
+      }
+    }
+    
+    // File upload
+    const fileInput = document.getElementById('cert-file');
+    const uploadBtn = document.getElementById('cert-upload-btn');
+    const imageInput = document.getElementById('cert-image');
+    const preview = document.getElementById('cert-preview');
+    
+    if (uploadBtn) {
+      uploadBtn.addEventListener('click', () => fileInput.click());
+    }
+    
+    if (fileInput) {
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (file.size > 5 * 1024 * 1024) {
+          showMessage('Image too large (max 5MB)', true);
+          return;
+        }
+        
+        if (!file.type.startsWith('image/')) {
+          showMessage('Please upload an image file', true);
+          return;
+        }
+        
+        showMessage('Uploading...', false);
+        const url = await uploadImageToStorage(file);
+        
+        if (url) {
+          imageInput.value = url;
+          preview.innerHTML = `<img src="${url}" alt="Preview">`;
+          showMessage('Image uploaded successfully!', false);
+        } else {
+          showMessage('Upload failed', true);
+        }
+        
+        fileInput.value = '';
+      });
+    }
+    
+    // Form submission
+    const certForm = document.getElementById('cert-form');
+    if (certForm) {
+      certForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const id = document.getElementById('cert-id').value;
+        const formData = {
+          title: document.getElementById('cert-title').value.trim(),
+          description: document.getElementById('cert-description').value.trim() || null,
+          issued_date: document.getElementById('cert-date').value || null,
+          certificate_url: document.getElementById('cert-url').value.trim() || null,
+          image_path: document.getElementById('cert-image').value.trim(),
+          display_order: parseInt(document.getElementById('cert-order').value) || 0,
+          is_active: document.getElementById('cert-active').checked,
+          updated_at: new Date().toISOString()
+        };
+        
+        if (!formData.title) {
+          showMessage('Title is required', true);
+          return;
+        }
+        
+        if (!formData.image_path) {
+          showMessage('Certificate image is required', true);
+          return;
+        }
+        
+        let result;
+        if (id) {
+          result = await supabase.from('certificates').update(formData).eq('id', id);
+        } else {
+          result = await supabase.from('certificates').insert([{
+            ...formData,
+            created_at: new Date().toISOString()
+          }]);
+        }
+        
+        if (result.error) {
+          showMessage('Save failed: ' + result.error.message, true);
+        } else {
+          showMessage(id ? 'Certificate updated' : 'Certificate added', false);
+          document.getElementById('cert-modal').setAttribute('aria-hidden', 'true');
+          document.getElementById('cert-modal').style.display = 'none';
+          document.getElementById('cert-form').reset();
+          document.getElementById('cert-id').value = '';
+          document.getElementById('cert-preview').innerHTML = '';
+          await loadAllCertificates();
+        }
+      });
+    }
+    
+    // Modal close handlers
+    document.querySelectorAll('.modal-dismiss').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('cert-modal').setAttribute('aria-hidden', 'true');
+        document.getElementById('cert-modal').style.display = 'none';
+        document.getElementById('cert-form').reset();
+        document.getElementById('cert-id').value = '';
+        document.getElementById('cert-preview').innerHTML = '';
+      });
+    });
+    
+    document.querySelectorAll('.view-modal-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        viewModal.setAttribute('aria-hidden', 'true');
+        viewModal.style.display = 'none';
+      });
+    });
+    
+    const addCertBtn = document.getElementById('add-cert-btn');
+    if (addCertBtn) {
+      addCertBtn.addEventListener('click', () => {
+        document.getElementById('cert-form').reset();
+        document.getElementById('cert-id').value = '';
+        document.getElementById('cert-preview').innerHTML = '';
+        document.getElementById('cert-modal-title').innerHTML = '+ Add Certificate';
+        document.getElementById('cert-modal').setAttribute('aria-hidden', 'false');
+        document.getElementById('cert-modal').style.display = 'flex';
+      });
+    }
+    
+    window.addEventListener('DOMContentLoaded', async () => {
+      const appShell = document.getElementById('app-shell');
+      if (appShell) appShell.classList.remove('app-hidden');
+      
+      if (typeof renderAdminSidebar === 'function') {
+        try { renderAdminSidebar('certificates'); } catch(e) {}
+      }
+      
+      await initializeSupabase();
+    });
+  })();
+</script>
+</body>
+</html>

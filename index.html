@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Office for International Affairs and Linkages at Opol Community College">
+    <link rel="icon" type="image/png" href="images/IAL-Logo.png" id="favicon">
+    <title>Office for International Affairs and Linkages | Opol Community College</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #102033;
+            --muted: #5f7188;
+            --line: #dbe5ef;
+            --soft: #f5f8fb;
+            --white: #ffffff;
+            --blue: #1454a8;
+            --blue-2: #0d3f7e;
+            --teal: #1aa5b5;
+            --gold: #c5a247;
+            --shadow: 0 22px 55px rgba(16, 32, 51, .11);
+            --radius: 8px;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: "DM Sans", system-ui, sans-serif;
+            color: var(--ink);
+            background: var(--white);
+            line-height: 1.65;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+        [data-lucide] { width: 1.05em; height: 1.05em; stroke-width: 2; }
+
+        .page-shell { overflow: hidden; }
+        .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+        .top-strip {
+            background: #0b2445;
+            color: rgba(255, 255, 255, .78);
+            font-size: .78rem;
+        }
+        .top-strip .container {
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .top-strip span, .top-strip a { display: inline-flex; align-items: center; gap: .45rem; }
+        .top-strip a { color: #d8e8ff; }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, .9);
+            border-bottom: 1px solid rgba(219, 229, 239, .85);
+            backdrop-filter: blur(16px);
+        }
+        .nav-bar {
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+        }
+        .brand { display: flex; align-items: center; gap: .8rem; min-width: 240px; }
+        .brand img { width: 46px; height: 46px; object-fit: contain; }
+        .brand strong {
+            display: block;
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.08rem;
+            line-height: 1;
+            color: var(--blue-2);
+        }
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-size: .72rem;
+            letter-spacing: .08em;
+            margin-top: .28rem;
+            text-transform: uppercase;
+        }
+
+        nav { display: flex; align-items: center; gap: .2rem; }
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: .38rem;
+            color: #34445a;
+            border-radius: 7px;
+            padding: .55rem .78rem;
+            font-size: .86rem;
+            font-weight: 600;
+            transition: background .2s ease, color .2s ease;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        nav a:hover { background: #edf5ff; color: var(--blue); }
+        nav a.active { background: #edf5ff; color: var(--blue); }
+
+        .menu-btn {
+            display: none;
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--line);
+            border-radius: 7px;
+            background: var(--white);
+            color: var(--blue);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 76px;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--line);
+            padding: 16px 20px;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+        .mobile-menu.open {
+            display: flex;
+        }
+        .mobile-menu a {
+            padding: 12px 16px;
+            border-radius: 7px;
+            color: #34445a;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .mobile-menu a:hover {
+            background: #edf5ff;
+            color: var(--blue);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            border-radius: 7px;
+            padding: .78rem 1rem;
+            font-weight: 700;
+            font-size: .92rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary { background: var(--blue); color: var(--white); box-shadow: 0 14px 32px rgba(20, 84, 168, .22); }
+        .btn-primary:hover { background: var(--blue-2); }
+        .btn-ghost { border-color: rgba(255, 255, 255, .32); color: var(--white); }
+        .btn-light { border-color: var(--line); color: var(--blue); background: var(--white); }
+
+        .hero {
+            min-height: calc(100vh - 114px);
+            display: grid;
+            align-items: center;
+            background:
+                linear-gradient(90deg, rgba(7, 28, 55, .93) 0%, rgba(8, 39, 76, .82) 45%, rgba(9, 42, 82, .45) 100%),
+                url("images/content/image8.jpeg") center/cover no-repeat;
+            color: var(--white);
+            position: relative;
+        }
+        .hero .container {
+            padding: 5rem 0 4rem;
+        }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            color: #cfe6ff;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .16);
+            border-radius: 999px;
+            padding: .42rem .8rem;
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        h1 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 1;
+            letter-spacing: -0.02em;
+            max-width: 850px;
+            margin: 1.35rem 0 1.25rem;
+        }
+        .hero-copy {
+            max-width: 690px;
+            color: rgba(255, 255, 255, .78);
+            font-size: clamp(1rem, 2vw, 1.18rem);
+        }
+
+        /* OCC Logo Section */
+        .occ-logo-section {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            background: var(--white);
+        }
+        .occ-logo-section img {
+            max-width: 180px;
+            width: 100%;
+            margin: 0 auto;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+        }
+        .occ-description {
+            max-width: 800px;
+            margin: 1.5rem auto 0;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .hero-actions { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2rem; }
+        .hero-panel {
+            width: min(760px, 100%);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            margin-top: 3rem;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: rgba(255, 255, 255, .12);
+            border-radius: var(--radius);
+            overflow: hidden;
+            backdrop-filter: blur(14px);
+        }
+        .hero-panel div {
+            padding: 1.05rem;
+            background: rgba(255, 255, 255, .08);
+        }
+        .hero-panel i { color: var(--gold); margin-bottom: .55rem; }
+        .hero-panel strong { display: block; font-size: .9rem; color: var(--white); }
+        .hero-panel span { color: rgba(255, 255, 255, .66); font-size: .8rem; }
+
+        section { padding: 5rem 0; }
+        .section-head { 
+            max-width: 100%; 
+            margin-bottom: 2.5rem; 
+            text-align: center;
+        }
+        .section-kicker {
+            color: var(--blue);
+            font-size: .78rem;
+            font-weight: 800;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+            margin-bottom: .5rem;
+            display: inline-block;
+        }
+        h2 {
+            font-family: "Cormorant Garamond", serif;
+            color: var(--blue-2);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.2;
+            letter-spacing: 0;
+            margin-bottom: .85rem;
+        }
+        .section-head p, .lead { color: var(--muted); font-size: 1rem; }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: .95fr 1.05fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .image-stack {
+            position: relative;
+            min-height: 460px;
+        }
+        .image-card {
+            position: absolute;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            background: var(--white);
+        }
+        .image-card.primary { inset: 0 11% 12% 0; }
+        .image-card.secondary { width: 48%; right: 0; bottom: 0; }
+        .image-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        .content-card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 2rem;
+            background: var(--white);
+        }
+        .content-card p + p { margin-top: 1rem; }
+
+        .framework { background: var(--soft); }
+        .framework-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.35rem;
+        }
+        .goal-card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 1.45rem;
+            background: var(--white);
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+        .goal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: #b8d1ee; }
+        .goal-card .icon {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 7px;
+            color: var(--blue);
+            background: #eaf4ff;
+            margin-bottom: 1rem;
+        }
+        .goal-card h3 { color: var(--blue-2); font-size: 1.02rem; margin-bottom: .35rem; }
+        .goal-card p { color: var(--muted); font-size: .94rem; }
+        .wide-card { grid-column: 1 / -1; display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start; }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .team-card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--white);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+        .team-photo {
+            aspect-ratio: 1 / 1;
+            background: #edf1f5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .team-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .team-photo.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+            background: linear-gradient(135deg, #eef6ff, #f8fbff);
+        }
+        .team-photo.placeholder .initials {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #cfe0f2;
+            background: var(--white);
+            color: var(--blue-2);
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+        .team-body { padding: 1.15rem; text-align: center; }
+        .team-body strong {
+            color: var(--blue-2);
+            line-height: 1.2;
+            display: block;
+            font-size: .96rem;
+        }
+        .team-body span { display: block; color: var(--muted); font-size: .8rem; margin-top: .45rem; line-height: 1.4; white-space: pre-line; }
+
+        .collaboration-section {
+            background: var(--soft);
+            text-align: center;
+        }
+        
+        .partners-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .partners-header h3 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 2rem;
+            color: var(--blue-2);
+            margin-bottom: 0.5rem;
+        }
+        .partners-header p {
+            color: var(--muted);
+        }
+        .collab-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .collab-item {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--white);
+            transition: transform .2s ease, box-shadow .2s ease;
+            overflow: hidden;
+        }
+        .collab-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Slideshow Styles */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            background: #f0f2f5;
+        }
+        .slideshow-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+        .slideshow-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slideshow-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slideshow-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        .slideshow-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        .slideshow-prev {
+            left: 10px;
+        }
+        .slideshow-next {
+            right: 10px;
+        }
+        .slideshow-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 10;
+        }
+        .slideshow-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .slideshow-dot.active {
+            background: white;
+            width: 20px;
+            border-radius: 4px;
+        }
+        
+        .collab-content {
+            padding: 1.5rem;
+        }
+        .collab-logo-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 1rem;
+        }
+        .collab-item span {
+            color: var(--blue);
+            font-size: .8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .collab-item strong {
+            color: var(--blue-2);
+            display: block;
+            margin-bottom: .5rem;
+            font-size: 1.1rem;
+        }
+        .collab-item p {
+            color: var(--muted);
+            font-size: .9rem;
+            line-height: 1.6;
+        }
+
+        .occ-iao-block {
+            background: linear-gradient(135deg, #0b2445, #1454a8);
+            color: var(--white);
+            padding: 4rem;
+            border-radius: var(--radius);
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .occ-iao-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            text-align: left;
+        }
+        .occ-iao-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .occ-iao-logo img {
+            max-width: 280px;
+            width: 100%;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+            border-radius: 12px;
+        }
+        .occ-iao-placeholder {
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .occ-iao-placeholder i {
+            width: 80px;
+            height: 80px;
+            color: rgba(255,255,255,0.6);
+        }
+        .occ-iao-text h3 {
+            color: var(--white);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-family: "Cormorant Garamond", serif;
+            text-align: left;
+        }
+        .occ-iao-text p {
+            color: rgba(255, 255, 255, .85);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        /* Certificate Gallery Styles */
+        .certificates-section {
+            background: var(--white);
+            padding: 5rem 0;
+        }
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .certificate-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--line);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-align: center;
+        }
+        .certificate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        .certificate-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f8fafc;
+        }
+        .certificate-info {
+            padding: 1.25rem;
+        }
+        .certificate-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--blue-2);
+            margin-bottom: 0.5rem;
+        }
+        .certificate-description {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        .certificate-date {
+            font-size: 0.75rem;
+            color: #8a99b0;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .certificate-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--blue);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .certificate-link:hover {
+            text-decoration: underline;
+        }
+
+        .contact { background: var(--soft); }
+        .contact-card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--white);
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+            box-shadow: 0 16px 45px rgba(16, 32, 51, .07);
+        }
+        .contact-list {
+            display: grid;
+            gap: .85rem;
+            margin-top: 1.35rem;
+        }
+        .contact-list a, .contact-list div {
+            display: flex;
+            align-items: flex-start;
+            gap: .72rem;
+            color: var(--muted);
+        }
+        .contact-list i { color: var(--blue); margin-top: .25rem; flex: 0 0 auto; }
+
+        footer {
+            background: #0b2445;
+            color: rgba(255, 255, 255, .68);
+            padding: 2rem 0;
+            font-size: .9rem;
+        }
+        footer .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        footer strong { color: var(--white); }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 960px) {
+            .menu-btn { display: inline-flex; }
+            nav { display: none; }
+            .nav-cta { display: none; }
+            .intro-grid, .framework-grid, .occ-iao-wrapper, .contact-card { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .wide-card { grid-template-columns: 1fr; }
+            .occ-iao-block { padding: 2rem; }
+            .occ-iao-text h3, .occ-iao-text p { text-align: center; }
+            .collab-list { grid-template-columns: 1fr; }
+            .certificates-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .container { width: min(100% - 28px, 1120px); }
+            .top-strip .container { justify-content: center; text-align: center; }
+            .top-strip a { display: none; }
+            .hero { min-height: auto; }
+            .hero .container { padding: 3rem 0 2rem; }
+            .hero-panel { grid-template-columns: 1fr; }
+            .image-stack { min-height: 360px; }
+            .image-card.primary { inset: 0 0 18% 0; }
+            .image-card.secondary { width: 54%; }
+            .team-grid { grid-template-columns: 1fr; }
+            .contact-card { padding: 1.35rem; grid-template-columns: 1fr; }
+            .collab-list { grid-template-columns: 1fr; }
+            .certificates-grid { grid-template-columns: 1fr; }
+            footer .container { flex-direction: column; text-align: center; }
+            h1 { font-size: 2rem; }
+            .occ-iao-text h3 { font-size: 1.5rem; }
+            .occ-logo-section img { max-width: 120px; }
+            .occ-iao-logo img { max-width: 180px; }
+            .slideshow-container { height: 200px; }
+            .certificate-image { height: 180px; }
+        }
+
+        .logo-loading {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .loading-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+<div class="page-shell">
+    <!-- Top Strip -->
+    <div class="top-strip">
+        <div class="container">
+            <span><i data-lucide="sparkles" aria-hidden="true"></i> Global engagement through curriculum, mobility, and linkages</span>
+            <a id="topEmail" href="#"><i data-lucide="mail" aria-hidden="true"></i> Loading...</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-bar">
+            <a class="brand" href="#home">
+                <div id="logo-container">
+                    <div class="logo-loading"></div>
+                </div>
+                <span>
+                    <strong id="brandName">Loading...</strong>
+                    <small id="brandSub">Opol Community College</small>
+                </span>
+            </a>
+
+            <nav id="siteNav">
+                <a href="#about" data-nav="about"><i data-lucide="building-2"></i>About</a>
+                <a href="#framework" data-nav="framework"><i data-lucide="target"></i>Framework</a>
+                <a href="#team" data-nav="team"><i data-lucide="users"></i>Team</a>
+                <a href="#collaboration" data-nav="collaboration"><i data-lucide="handshake"></i>Collaboration</a>
+                <a href="#certificates" data-nav="certificates"><i data-lucide="award"></i>Certificates</a>
+                <a href="#contact" data-nav="contact"><i data-lucide="send"></i>Contact</a>
+            </nav>
+
+            <a class="btn btn-light nav-cta" href="#contact"><i data-lucide="mail-plus"></i>Partner With Us</a>
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#about"><i data-lucide="building-2"></i>About</a>
+            <a href="#framework"><i data-lucide="target"></i>Framework</a>
+            <a href="#team"><i data-lucide="users"></i>Team</a>
+            <a href="#collaboration"><i data-lucide="handshake"></i>Collaboration</a>
+            <a href="#certificates"><i data-lucide="award"></i>Certificates</a>
+            <a href="#contact"><i data-lucide="send"></i>Contact</a>
+        </div>
+    </header>
+
+    <main id="home">
+        <!-- Hero Section -->
+        <section class="hero" id="heroSection">
+            <div class="container">
+                <div class="reveal">
+                    <span class="eyebrow"><i data-lucide="globe-2"></i> <span id="heroKicker">Opol Community College</span></span>
+                    <h1 id="heroTitle">Loading...</h1>
+                    <p class="hero-copy" id="heroDescription">Loading...</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#about"><i data-lucide="arrow-down"></i>Explore the Office</a>
+                        <a class="btn btn-ghost" href="#contact"><i data-lucide="handshake"></i>Partner With Us</a>
+                    </div>
+                </div>
+
+                <div class="hero-panel reveal">
+                    <div><i data-lucide="book-open"></i><strong>Curriculum</strong><span>ASEAN and global content integration</span></div>
+                    <div><i data-lucide="plane"></i><strong>Mobility</strong><span>Student and faculty exchange programs</span></div>
+                    <div><i data-lucide="landmark"></i><strong>Standards</strong><span>National and global alignment</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OCC Logo Section -->
+        <div class="occ-logo-section reveal">
+            <div class="container">
+                <img src="images/OCC-Logo.png" alt="Opol Community College Logo" onerror="this.src='images/IAL-Logo.png'">
+                <div class="occ-description">
+                    The Office for International Affairs and Linkages is a key support system for global engagement. It helps raise the institution's visibility and build academic partnerships. The office promotes internationalization through its efforts in the curriculum, mobility programs, and institutional linkages that meet national and global standards.
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <section id="about">
+            <div class="container intro-grid">
+                <div class="image-stack reveal">
+                    <div class="image-card primary"><img id="aboutImage" src="images/content/image8.jpeg" alt="International Affairs Office"></div>
+                    <div class="image-card secondary"><img id="aboutLogoImg" src="images/content/image12.png" alt="IAL Logo"></div>
+                </div>
+                <div class="content-card reveal">
+                    <div class="section-kicker">About the Office</div>
+                    <h2>Global engagement through curriculum, mobility, and institutional linkages.</h2>
+                    <p id="aboutDescription">Loading...</p>
+                    <p id="aboutExtended">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Framework Section -->
+        <section class="framework" id="framework">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div class="section-kicker">Institutional Framework</div>
+                    <h2 id="frameworkTitle">Vision-Mission Alignment</h2>
+                    <p id="frameworkDescription">Loading...</p>
+                </div>
+                <div class="framework-grid">
+                    <article class="goal-card wide-card reveal">
+                        <div class="icon"><i data-lucide="compass"></i></div>
+                        <div><h3>Vision-Mission Alignment</h3><p id="missionVisionText">Loading...</p></div>
+                    </article>
+                    <article class="goal-card wide-card reveal">
+                        <div class="icon"><i data-lucide="target"></i></div>
+                        <div><h3>Goals of Internationalization</h3><p>The internationalization initiatives of OCC aim to:</p></div>
+                    </article>
+                    <article class="goal-card reveal"><div class="icon"><i data-lucide="book-open"></i></div><h3>Instruction</h3><p>Integrate ASEAN and global content into curriculum.</p></article>
+                    <article class="goal-card reveal"><div class="icon"><i data-lucide="microscope"></i></div><h3>Research</h3><p>Foster collaborative research with ASEAN and global partners.</p></article>
+                    <article class="goal-card reveal"><div class="icon"><i data-lucide="plane"></i></div><h3>Mobility</h3><p>Promote student and faculty exchange programs.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div class="section-kicker">Team</div>
+                    <h2>MEET OUR TEAM</h2>
+                </div>
+                <div class="team-grid" id="teamGrid">
+                    <div class="loading-placeholder">Loading team members...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collaboration Section -->
+        <section class="collaboration-section" id="collaboration">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div class="section-kicker">Collaboration</div>
+                    <h2>Global Partnerships & Initiatives</h2>
+                </div>
+
+                <div class="partners-header reveal">
+                    <h3>Partner Institutions</h3>
+                    <p>Collaborating with universities and organizations worldwide</p>
+                </div>
+                <div class="collab-list" id="collaborationsList">
+                    <div class="loading-placeholder">Loading partner institutions...</div>
+                </div>
+
+                <div class="occ-iao-block reveal">
+                    <div class="occ-iao-wrapper">
+                        <div class="occ-iao-logo">
+                            <img src="images/OCC-IAO-Logo.png" alt="OCC Internationalization Ambassadors Organization" 
+                                 style="max-width: 280px; width: 100%; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2)); border-radius: 12px;">
+                        </div>
+                        <div class="occ-iao-text">
+                            <h3>OCC Internationalization Ambassadors Organization</h3>
+                            <p>The OCC Internationalization Ambassadors Organization (OCC-IAO) is established to serve as a vital extension of the Office for Internationalization, empowering students to actively participate in and contribute to the college's internationalization initiatives.</p>
+                            <p>The OCC-IAO, which is based on the ideas of internationalization and global citizenship, aims to produce globally capable student leaders who can represent the college in a variety of international engagements while fostering a friendly and inclusive environment for foreign partners, visitors, and guests.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificates Gallery Section -->
+        <section class="certificates-section" id="certificates">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div class="section-kicker">Recognition</div>
+                    <h2>Certificates & Awards</h2>
+                    <p>Recognitions and achievements of the Office for International Affairs and Linkages</p>
+                </div>
+                <div class="certificates-grid" id="certificatesList">
+                    <div class="loading-placeholder">Loading certificates...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="contact-card reveal">
+                    <div>
+                        <div class="section-kicker">Partner With Us</div>
+                        <h2 id="contactOrgName">Loading...</h2>
+                        <p class="lead" id="contactCollege">Opol Community College</p>
+                        <p id="contactAddress" style="color: var(--muted);">Loading...</p>
+                        <div class="contact-list" id="contactList">
+                            <a id="contactEmailLink" href="#"><i data-lucide="mail"></i><span id="contactEmail">Loading...</span></a>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary" id="emailOfficeBtn" href="#"><i data-lucide="send"></i>Email the Office</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <strong id="footerOrgName">Loading...</strong>
+            <span>&copy; <span id="currentYear"></span> Opol Community College. All rights reserved.</span>
+        </div>
+    </footer>
+</div>
+
+<script>
+    const SUPABASE_URL = 'https://wxcybeaafimxjhbhblzg.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
+    const db = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    function cleanText(text) {
+        if (!text) return '';
+        return String(text).replace(/&[a-z]+;/gi, '').replace(/<[^>]*>/g, '').trim();
+    }
+
+    function escapeHTML(value) {
+        if (!value) return '';
+        return String(value).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function assetURL(path) {
+        if (!path) return '';
+        if (/^(https?:|data:|blob:|images\/|\.\/|\/)/i.test(path)) return path;
+        return `${SUPABASE_URL}/storage/v1/object/public/${path.replace(/^\/+/, '')}`;
+    }
+
+    function setText(id, value) {
+        const el = document.getElementById(id);
+        if (el && value) el.textContent = cleanText(value);
+    }
+
+    function setImage(id, path) {
+        const src = assetURL(path);
+        if (!src) return;
+        const img = document.getElementById(id);
+        if (img) img.src = src;
+    }
+
+    function setBrandLogo(url) {
+        const logoContainer = document.getElementById('logo-container');
+        if (logoContainer && url) {
+            logoContainer.innerHTML = `<img src="${url}" alt="IAL logo" style="width:46px;height:46px;object-fit:contain;" onerror="this.src='images/IAL-Logo.png'">`;
+        }
+    }
+
+    function initials(name) {
+        if (!name) return 'IA';
+        let cleanName = String(name).replace(/[^a-zA-Z\s\.]/g, '').trim();
+        if (!cleanName) return 'IA';
+        const parts = cleanName.split(/\s+/).filter(Boolean);
+        if (parts.length === 0) return 'IA';
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        const firstInitial = parts[0].charAt(0).toUpperCase();
+        const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase();
+        return firstInitial + lastInitial;
+    }
+
+    function refreshIcons() {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Slideshow class
+    class Slideshow {
+        constructor(container, images) {
+            this.container = container;
+            this.images = images;
+            this.currentIndex = 0;
+            this.interval = null;
+            this.init();
+        }
+        
+        init() {
+            if (!this.images || this.images.length === 0) {
+                this.container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #8a99b0;">No images</div>';
+                return;
+            }
+            
+            const slidesContainer = document.createElement('div');
+            slidesContainer.className = 'slideshow-slides';
+            
+            this.images.forEach(img => {
+                const slide = document.createElement('div');
+                slide.className = 'slideshow-slide';
+                slide.innerHTML = `<img src="${escapeHTML(img)}" alt="Gallery image" loading="lazy">`;
+                slidesContainer.appendChild(slide);
+            });
+            
+            this.container.appendChild(slidesContainer);
+            
+            if (this.images.length > 1) {
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'slideshow-btn slideshow-prev';
+                prevBtn.innerHTML = '‹';
+                prevBtn.onclick = () => this.prevSlide();
+                
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'slideshow-btn slideshow-next';
+                nextBtn.innerHTML = '›';
+                nextBtn.onclick = () => this.nextSlide();
+                
+                const dotsContainer = document.createElement('div');
+                dotsContainer.className = 'slideshow-dots';
+                this.images.forEach((_, i) => {
+                    const dot = document.createElement('div');
+                    dot.className = `slideshow-dot ${i === 0 ? 'active' : ''}`;
+                    dot.onclick = () => this.goToSlide(i);
+                    dotsContainer.appendChild(dot);
+                });
+                
+                this.container.appendChild(prevBtn);
+                this.container.appendChild(nextBtn);
+                this.container.appendChild(dotsContainer);
+                this.dots = dotsContainer.children;
+                
+                this.startAutoPlay();
+                this.container.addEventListener('mouseenter', () => this.stopAutoPlay());
+                this.container.addEventListener('mouseleave', () => this.startAutoPlay());
+            }
+        }
+        
+        updateSlides() {
+            const slidesContainer = this.container.querySelector('.slideshow-slides');
+            if (slidesContainer) {
+                slidesContainer.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+            }
+            if (this.dots) {
+                Array.from(this.dots).forEach((dot, i) => {
+                    dot.className = `slideshow-dot ${i === this.currentIndex ? 'active' : ''}`;
+                });
+            }
+        }
+        
+        nextSlide() { if (this.images.length === 0) return; this.currentIndex = (this.currentIndex + 1) % this.images.length; this.updateSlides(); }
+        prevSlide() { if (this.images.length === 0) return; this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length; this.updateSlides(); }
+        goToSlide(index) { this.currentIndex = index; this.updateSlides(); }
+        startAutoPlay() { if (this.images.length <= 1) return; this.stopAutoPlay(); this.interval = setInterval(() => this.nextSlide(), 4000); }
+        stopAutoPlay() { if (this.interval) { clearInterval(this.interval); this.interval = null; } }
+    }
+
+    // Navigation function to set active state
+    function setActiveNav() {
+        const scrollPos = window.scrollY + 100;
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a, .mobile-menu a');
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionBottom = sectionTop + section.offsetHeight;
+            
+            if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                const currentId = section.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }
+
+    async function loadOrganizationProfile() {
+        if (!db) return;
+        const { data, error } = await db.from('organization_profile').select('*').order('updated_at', { ascending: false }).limit(1).maybeSingle();
+        if (error || !data) return;
+
+        setText('brandName', data.org_name);
+        setText('heroTitle', `THE ${(data.org_name || '').toUpperCase()} at Opol Community College`);
+        setText('heroKicker', 'Opol Community College');
+        setText('heroDescription', data.description);
+        setText('aboutDescription', data.description);
+        setText('aboutExtended', 'The office promotes internationalization through its efforts in curriculum, mobility programs, and institutional linkages that meet national and global standards.');
+        setText('frameworkTitle', data.vision_statement ? 'Vision-Mission Alignment' : 'Institutional Framework');
+        setText('frameworkDescription', data.vision_statement || data.description);
+        
+        if (data.mission_statement || data.vision_statement) {
+            const missionText = data.mission_statement ? `Mission: ${data.mission_statement}` : '';
+            const visionText = data.vision_statement ? `Vision: ${data.vision_statement}` : '';
+            setText('missionVisionText', [visionText, missionText].filter(Boolean).join(' '));
+        }
+        
+        setText('contactOrgName', data.org_name);
+        setText('contactCollege', 'Opol Community College');
+        setText('contactAddress', data.address || 'Opol, Misamis Oriental, Philippines');
+        
+        if (data.email) {
+            setText('contactEmail', data.email);
+            const mailto = `mailto:${data.email}`;
+            const topEmail = document.getElementById('topEmail');
+            if (topEmail) { topEmail.href = mailto; topEmail.innerHTML = `<i data-lucide="mail"></i> ${data.email}`; }
+            const contactEmailLink = document.getElementById('contactEmailLink');
+            if (contactEmailLink) contactEmailLink.href = mailto;
+            const emailOfficeBtn = document.getElementById('emailOfficeBtn');
+            if (emailOfficeBtn) emailOfficeBtn.href = mailto;
+        }
+        
+        setText('footerOrgName', data.org_name);
+        
+        if (data.phone) {
+            const contactList = document.getElementById('contactList');
+            if (contactList && !document.getElementById('contactPhone')) {
+                contactList.insertAdjacentHTML('beforeend', `<div id="contactPhone" style="display: flex; align-items: center; gap: .72rem;"><i data-lucide="phone"></i><span>${escapeHTML(data.phone)}</span></div>`);
+            }
+        }
+        
+        if (data.logo_path) {
+            const logoUrl = assetURL(data.logo_path);
+            setBrandLogo(logoUrl);
+            setImage('aboutLogoImg', data.logo_path);
+        }
+        
+        if (data.cover_image_path) {
+            const coverUrl = assetURL(data.cover_image_path);
+            const heroSection = document.getElementById('heroSection');
+            if (heroSection && coverUrl) {
+                heroSection.style.backgroundImage = `linear-gradient(90deg, rgba(7, 28, 55, .93) 0%, rgba(8, 39, 76, .82) 45%, rgba(9, 42, 82, .45) 100%), url("${coverUrl}")`;
+            }
+            setImage('aboutImage', data.cover_image_path);
+        }
+        refreshIcons();
+    }
+
+    async function loadTeamMembers() {
+        if (!db) return;
+        const grid = document.getElementById('teamGrid');
+        if (!grid) return;
+
+        grid.innerHTML = '<div class="loading-placeholder">Loading team members...</div>';
+        
+        let { data, error } = await db
+            .from('team_members')
+            .select('*')
+            .eq('is_active', true)
+            .order('display_order', { ascending: true });
+
+        if (error || !data || data.length === 0) {
+            grid.innerHTML = '<div class="loading-placeholder">No team members found.</div>';
+            return;
+        }
+
+        grid.innerHTML = data.map((member) => {
+            const name = (member.name || 'Team Member').replace(/[^a-zA-Z\s\.]/g, '');
+            const role = (member.position || member.role || '').replace(/[^a-zA-Z\s\.\,\-]/g, '');
+            const hasImage = member.image_path && member.image_path.trim() !== '';
+            const image = hasImage ? assetURL(member.image_path) : '';
+
+            const media = hasImage
+                ? `<div class="team-photo"><img src="${escapeHTML(image)}" alt="${escapeHTML(name)}" onerror="this.style.display='none'; this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='<div class=\\'initials\\'>${escapeHTML(initials(name))}</div>'"></div>`
+                : `<div class="team-photo placeholder"><div class="initials">${escapeHTML(initials(name))}</div></div>`;
+
+            return `<article class="team-card reveal visible">${media}<div class="team-body"><strong>${escapeHTML(name)}</strong>${role ? `<span>${escapeHTML(role)}</span>` : ''}</div></article>`;
+        }).join('');
+        refreshIcons();
+    }
+
+    async function loadCollaborations() {
+        if (!db) return;
+        const container = document.getElementById('collaborationsList');
+        if (!container) return;
+        
+        let { data: collaborations, error } = await db.from('collaborations').select('*').eq('is_active', true).order('display_order', { ascending: true });
+        if (error || !collaborations || collaborations.length === 0) {
+            container.innerHTML = '<div class="loading-placeholder">No partner institutions found.</div>';
+            return;
+        }
+        
+        const collaborationsWithGallery = await Promise.all(collaborations.map(async (collab) => {
+            const { data: gallery } = await db.from('collab_gallery').select('image_url').eq('collaboration_id', collab.id).order('display_order', { ascending: true });
+            return { ...collab, gallery_images: gallery?.map(g => g.image_url) || [] };
+        }));
+        
+        container.innerHTML = collaborationsWithGallery.map((item) => {
+            const mainImage = item.image_path ? assetURL(item.image_path) : null;
+            const displayImages = (item.gallery_images.length > 0) ? item.gallery_images : (mainImage ? [mainImage] : []);
+            return `<article class="collab-item reveal visible"><div id="slideshow-${item.id}" class="slideshow-container" style="height: 250px;"></div><div class="collab-content">${item.partner_name ? `<span>${escapeHTML(cleanText(item.partner_name))}</span>` : ''}<strong>${escapeHTML(cleanText(item.title))}</strong>${item.description ? `<p>${escapeHTML(cleanText(item.description))}</p>` : ''}</div></article>`;
+        }).join('');
+        
+        setTimeout(() => {
+            collaborationsWithGallery.forEach((item) => {
+                const container = document.getElementById(`slideshow-${item.id}`);
+                if (container) {
+                    const mainImage = item.image_path ? assetURL(item.image_path) : null;
+                    const displayImages = (item.gallery_images.length > 0) ? item.gallery_images : (mainImage ? [mainImage] : []);
+                    new Slideshow(container, displayImages);
+                }
+            });
+        }, 100);
+        refreshIcons();
+    }
+
+    async function loadCertificates() {
+        if (!db) return;
+        const container = document.getElementById('certificatesList');
+        if (!container) return;
+        
+        let { data, error } = await db
+            .from('certificates')
+            .select('*')
+            .eq('is_active', true)
+            .order('display_order', { ascending: true });
+        
+        if (error || !data || data.length === 0) {
+            container.innerHTML = '<div class="loading-placeholder">No certificates found.</div>';
+            return;
+        }
+        
+        container.innerHTML = data.map(cert => `
+            <div class="certificate-card reveal visible">
+                <img class="certificate-image" src="${assetURL(cert.image_path)}" alt="${escapeHTML(cert.title)}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'%238a99b0\'%3E%3Cpath d=\'M4 16l4-4 4 4 4-4 4 4V4H4v12z\'/%3E%3C/svg%3E'">
+                <div class="certificate-info">
+                    <div class="certificate-title">${escapeHTML(cert.title)}</div>
+                    <div class="certificate-description">${escapeHTML(cert.description || '')}</div>
+                    ${cert.issued_date ? `<div class="certificate-date"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${new Date(cert.issued_date).toLocaleDateString()}</div>` : ''}
+                    ${cert.certificate_url ? `<a href="${cert.certificate_url}" target="_blank" class="certificate-link">View Certificate →</a>` : ''}
+                </div>
+            </div>
+        `).join('');
+        refreshIcons();
+    }
+
+    function initInteractions() {
+        refreshIcons();
+        
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                const isOpen = mobileMenu.classList.toggle('open');
+                menuBtn.setAttribute('aria-expanded', String(isOpen));
+                menuBtn.innerHTML = isOpen ? '<i data-lucide="x"></i>' : '<i data-lucide="menu"></i>';
+                refreshIcons();
+            });
+        }
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                if (menuBtn) {
+                    menuBtn.setAttribute('aria-expanded', 'false');
+                    menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+                    refreshIcons();
+                }
+            });
+        });
+        
+        // Set active nav on scroll
+        window.addEventListener('scroll', setActiveNav);
+        setActiveNav();
+        
+        // Reveal animations
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    }
+
+    async function initDynamicContent() {
+        await Promise.all([loadOrganizationProfile(), loadTeamMembers(), loadCollaborations(), loadCertificates()]);
+        refreshIcons();
+    }
+
+    initInteractions();
+    initDynamicContent();
+</script>
+</body>
+</html>

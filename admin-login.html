@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="images/Admin-icon.jpg" id="favicon"> 
+  <title>Sign in · IAL Admin</title>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <script>
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
+      location.replace('admin.html');
+    }
+  </script>
+</head>
+<body>
+
+<div class="login-screen" aria-label="Sign in">
+
+  <div class="login-left">
+    <div class="login-brand">
+      <div class="login-brand-mark">
+        <img src="images/IAL-Logo.png" width="40" height="40" alt="International Affairs &amp; Linkages"/>
+      </div>
+      <h1>IAL Admin</h1>
+      <p>Office of Global Engagement</p>
+    </div>
+    <div class="login-quote">
+      <blockquote>Connecting institutions,<br/>shaping global futures.</blockquote>
+      <cite>International Affairs &amp; Linkages</cite>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-panel">
+      <h2>Welcome back</h2>
+      <p>Sign in to manage your organization.</p>
+
+      <form class="login-form" id="login-form">
+        <div class="field-group">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" name="username" placeholder="Username/Email" autocomplete="username" required/>
+        </div>
+        <div class="field-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" placeholder="••••••••" autocomplete="current-password" required/>
+        </div>
+        <button type="submit" class="btn-primary">Sign in →</button>
+      </form>
+
+      <div id="login-error" role="alert"></div>
+
+      <div class="login-hint">
+        <p>Forgot your password? Contact your administrator to reset access.</p>
+      </div>
+
+      <p class="login-back">
+        <a href="index.html">← Back to website</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/admin-auth.js"></script>
+<script src="js/admin-login.js"></script>
+</body>
+</html>
