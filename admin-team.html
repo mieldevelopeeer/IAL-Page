@@ -597,12 +597,15 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 0.7rem 1rem;
+      padding: 0.85rem 1rem;
       border: 1.5px solid #e2e8f0;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
       background: #fafbfd;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
     }
 
     .toggle-switch-row:hover {
@@ -655,15 +658,17 @@
     }
 
     .toggle-label-text {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      color: #374151;
+      color: #1e3a5f;
+      white-space: normal;
     }
 
     .toggle-label-sub {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: #94a3b8;
-      margin-top: 0.1rem;
+      margin-top: 0.15rem;
+      white-space: normal;
     }
 
     .btn-upload {
@@ -938,6 +943,8 @@
       <form id="team-modal-form">
         <input type="hidden" id="modal-team-id">
         <div class="form-grid">
+
+          <!-- Row 1: Name + Position -->
           <div class="form-cols-2">
             <div class="field">
               <label><i data-lucide="user"></i> Full Name *</label>
@@ -947,6 +954,10 @@
               <label><i data-lucide="briefcase"></i> Position *</label>
               <input type="text" id="modal-team-position" required placeholder="Director">
             </div>
+          </div>
+
+          <!-- Row 2: Role + Display Order -->
+          <div class="form-cols-2">
             <div class="field">
               <label><i data-lucide="tag"></i> Role Type</label>
               <select id="modal-team-role">
@@ -961,37 +972,45 @@
               <label><i data-lucide="list-ordered"></i> Display Order</label>
               <input type="number" id="modal-team-order" value="0" min="0" step="1">
             </div>
-            <div class="field">
-              <label><i data-lucide="image"></i> Photo</label>
-              <input type="text" id="modal-team-image" placeholder="Image URL or upload below">
-              <button type="button" class="btn-upload" id="modal-team-upload-btn">
-                <i data-lucide="upload"></i> Upload photo
-              </button>
-              <input type="file" id="modal-team-file" hidden accept="image/*">
-              <div id="modal-team-preview" class="img-preview"></div>
-            </div>
+          </div>
 
-            <!-- Toggle Switch -->
-            <div class="field">
-              <label><i data-lucide="eye"></i> Visibility</label>
-              <label class="toggle-switch-row" for="modal-team-active">
-                <div class="toggle-switch">
-                  <input type="checkbox" id="modal-team-active" checked>
-                  <span class="toggle-slider"></span>
-                </div>
-                <div>
-                  <div class="toggle-label-text" id="toggle-label-text">Visible on public site</div>
-                  <div class="toggle-label-sub" id="toggle-label-sub">Members can see this person</div>
-                </div>
-              </label>
+          <!-- Row 3: Photo + Preview side by side -->
+          <div class="field">
+            <label><i data-lucide="image"></i> Photo</label>
+            <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
+              <div style="flex:1; min-width:180px; display:flex; flex-direction:column; gap:0.5rem;">
+                <input type="text" id="modal-team-image" placeholder="Paste image URL, or upload below">
+                <button type="button" class="btn-upload" id="modal-team-upload-btn">
+                  <i data-lucide="upload"></i> Upload photo
+                </button>
+                <input type="file" id="modal-team-file" hidden accept="image/*">
+              </div>
+              <div id="modal-team-preview" class="img-preview" style="flex-shrink:0;"></div>
             </div>
           </div>
 
+          <!-- Row 4: Visibility toggle — full width -->
+          <div class="field">
+            <label><i data-lucide="eye"></i> Visibility</label>
+            <label class="toggle-switch-row" for="modal-team-active">
+              <div class="toggle-switch">
+                <input type="checkbox" id="modal-team-active" checked>
+                <span class="toggle-slider"></span>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div class="toggle-label-text" id="toggle-label-text">Visible on public site</div>
+                <div class="toggle-label-sub" id="toggle-label-sub">This member appears on the website</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Row 5: Bio — full width -->
           <div class="field">
             <label><i data-lucide="align-left"></i> Bio</label>
             <textarea id="modal-team-bio" rows="3" placeholder="Short biography..."></textarea>
           </div>
 
+          <!-- Row 6: Email + LinkedIn -->
           <div class="form-cols-2">
             <div class="field">
               <label><i data-lucide="mail"></i> Email</label>
@@ -1002,6 +1021,7 @@
               <input type="url" id="modal-team-linkedin" placeholder="https://linkedin.com/in/username">
             </div>
           </div>
+
         </div>
 
         <div class="ial-modal__actions">
