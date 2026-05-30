@@ -136,12 +136,66 @@
       font-weight: 700;
       letter-spacing: -0.01em;
       color: #1e3a5f;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .card-subtitle {
       font-size: 0.875rem;
       color: #6c7a91;
       margin-top: 0.25rem;
+    }
+
+    .card-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 0.4rem;
+      background: #f1f5f9;
+      padding: 0.3rem;
+      border-radius: 12px;
+    }
+
+    .filter-tab {
+      padding: 0.35rem 0.9rem;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #6c7a91;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .filter-tab.active {
+      background: white;
+      color: #1e3a5f;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .filter-tab .tab-count {
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 0.7rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 20px;
+      font-weight: 700;
+    }
+
+    .filter-tab.active .tab-count {
+      background: #dbeafe;
+      color: #1e3a5f;
     }
 
     .add-btn {
@@ -166,8 +220,11 @@
 
     .save-msg {
       font-size: 0.8rem;
-      margin-right: 1rem;
+      margin-right: 0.5rem;
       color: #10b981;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .save-msg.error {
@@ -178,7 +235,7 @@
     .team-grid {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0;
       padding: 0;
       min-height: 400px;
     }
@@ -195,9 +252,22 @@
       gap: 1rem;
     }
 
+    .team-item:last-child {
+      border-bottom: none;
+    }
+
     .team-item:hover {
       background: #fafcff;
       transform: translateX(4px);
+    }
+
+    .team-item.is-inactive {
+      opacity: 0.6;
+      background: #fafafa;
+    }
+
+    .team-item.is-inactive:hover {
+      opacity: 1;
     }
 
     .team-info {
@@ -218,6 +288,7 @@
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
+      flex-shrink: 0;
     }
 
     .team-details {
@@ -228,7 +299,7 @@
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
@@ -239,18 +310,25 @@
     .badge-active {
       background: #e0f2e9;
       color: #1c6e3f;
-      font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
+      font-size: 0.68rem;
+      padding: 0.18rem 0.55rem;
       border-radius: 20px;
-      font-weight: 600;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .badge-inactive {
       background: #f1f3f5;
       color: #5c6f87;
-      font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
+      font-size: 0.68rem;
+      padding: 0.18rem 0.55rem;
       border-radius: 20px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .team-position {
@@ -260,33 +338,44 @@
     }
 
     .team-role {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       background: #eef2ff;
       color: #1e3a5f;
-      padding: 0.2rem 0.5rem;
+      padding: 0.18rem 0.5rem;
       border-radius: 12px;
       display: inline-block;
+      font-weight: 600;
+    }
+
+    .order-badge {
+      font-size: 0.68rem;
+      background: #f0f2f5;
+      color: #5c6f87;
+      padding: 0.1rem 0.5rem;
+      border-radius: 20px;
     }
 
     .team-actions {
       display: flex;
-      gap: 8px;
+      gap: 4px;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .icon-btn {
       background: none;
       border: none;
       cursor: pointer;
-      padding: 8px;
+      padding: 7px 10px;
       border-radius: 10px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       color: #6c7a91;
       transition: all 0.2s;
       font-size: 0.75rem;
       font-weight: 500;
+      white-space: nowrap;
     }
 
     .icon-btn:hover {
@@ -303,9 +392,25 @@
       color: #1e3a5f;
     }
 
+    .icon-btn.toggle-btn-activate:hover {
+      background: #e0f2e9;
+      color: #1c6e3f;
+    }
+
+    .icon-btn.toggle-btn-deactivate:hover {
+      background: #fff3e0;
+      color: #b45309;
+    }
+
     .icon-btn.delete-btn:hover {
       background: #fee9e9;
       color: #dc2626;
+    }
+
+    .icon-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     /* Pagination Styles */
@@ -323,6 +428,9 @@
     .pagination-info {
       font-size: 0.8rem;
       color: #6c7a91;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
     .pagination-buttons {
@@ -396,14 +504,8 @@
     }
 
     @keyframes modalFadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.97);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
     }
 
     .ial-modal__header {
@@ -422,6 +524,9 @@
       font-size: 1.25rem;
       font-weight: 700;
       color: #1e3a5f;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .ial-modal__close {
@@ -487,11 +592,78 @@
       box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
     }
 
-    .checkbox-row {
+    /* Toggle Switch */
+    .toggle-switch-row {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
       cursor: pointer;
+      transition: all 0.2s;
+      background: #fafbfd;
+    }
+
+    .toggle-switch-row:hover {
+      border-color: #1e3a5f;
+      background: #f0f4ff;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #cbd5e1;
+      border-radius: 24px;
+      transition: background 0.25s;
+      cursor: pointer;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.25s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: #16a34a;
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(18px);
+    }
+
+    .toggle-label-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .toggle-label-sub {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 0.1rem;
     }
 
     .btn-upload {
@@ -580,16 +752,100 @@
       background: #b91c1c;
     }
 
+    /* Quick toggle confirm modal */
+    .toggle-confirm-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 12px;
+      margin: 1rem 0;
+      border: 1px solid #eef2f8;
+    }
+
+    .toggle-confirm-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-confirm-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .toggle-confirm-details strong {
+      display: block;
+      font-size: 0.95rem;
+      color: #1e3a5f;
+    }
+
+    .toggle-confirm-details span {
+      font-size: 0.8rem;
+      color: #6c7a91;
+    }
+
+    .btn-activate {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+    }
+
+    .btn-activate:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    }
+
+    .btn-deactivate {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+    }
+
+    .btn-deactivate:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    }
+
     .loading-placeholder {
       padding: 2rem;
       text-align: center;
       color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .empty-state {
       padding: 3rem;
       text-align: center;
       color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .field-value {
+      color: #374151;
+      font-size: 0.9rem;
+      padding: 0.5rem 0;
+    }
+
+    @media (max-width: 640px) {
+      .form-cols-2 { grid-template-columns: 1fr; }
+      .team-actions { gap: 2px; }
+      .icon-btn span { display: none; }
+      .page-content { padding: 1rem; }
+      .topbar { padding: 1rem; }
+      .filter-tabs { flex-wrap: wrap; }
     }
   </style>
   <link rel="stylesheet" href="css/admin.css"/>
@@ -608,42 +864,60 @@
     <div class="topbar">
       <div class="topbar-left">
         <div class="topbar-heading">
-          <span class="topbar-icon">
-            <i data-lucide="users"></i>
-          </span>
+          <span class="topbar-icon"><i data-lucide="users"></i></span>
           <div>
             <h2>Team Management</h2>
-            <p>Manage team members</p>
+            <p>Manage team members and visibility</p>
           </div>
         </div>
       </div>
-      <div class="topbar-right"><span id="connection-status" class="status-dot connecting"><i data-lucide="wifi"></i> Connecting...</span></div>
+      <div class="topbar-right">
+        <span id="connection-status" class="status-dot connecting"><i data-lucide="wifi"></i> Connecting...</span>
+      </div>
     </div>
 
     <div class="page-content">
-      <div id="policy-status" class="policy-banner" style="display: none;"></div>
-      
       <div id="team-panel" class="tab-panel active">
         <div class="card">
           <div class="card-header">
             <div>
               <div class="card-title"><i data-lucide="users"></i> Team Members</div>
-              <div class="card-subtitle">Manage names, positions, photos, and contact details</div>
+              <div class="card-subtitle">Manage names, positions, photos, and visibility</div>
             </div>
             <div class="card-header-actions">
               <span id="team-msg" class="save-msg"></span>
+
+              <!-- Filter Tabs -->
+              <div class="filter-tabs" id="filter-tabs">
+                <button class="filter-tab active" data-filter="all">
+                  All <span class="tab-count" id="count-all">0</span>
+                </button>
+                <button class="filter-tab" data-filter="active">
+                  <i data-lucide="eye"></i> Active <span class="tab-count" id="count-active">0</span>
+                </button>
+                <button class="filter-tab" data-filter="inactive">
+                  <i data-lucide="eye-off"></i> Inactive <span class="tab-count" id="count-inactive">0</span>
+                </button>
+              </div>
+
               <button type="button" class="add-btn" id="add-team-btn">
                 <i data-lucide="plus"></i>
                 <span>Add member</span>
               </button>
             </div>
           </div>
+
           <div id="team-list" class="team-grid">
-            <div class="loading-placeholder">Loading team members...</div>
+            <div class="loading-placeholder">
+              <i data-lucide="loader"></i>
+              <span>Loading team members...</span>
+            </div>
           </div>
+
           <div id="pagination-container" class="pagination-container" style="display: none;">
             <div class="pagination-info">
-              <i data-lucide="info"></i> Showing <span id="showing-start">0</span> - <span id="showing-end">0</span> of <span id="total-items">0</span> members
+              <i data-lucide="info"></i>
+              Showing <span id="showing-start">0</span>–<span id="showing-end">0</span> of <span id="total-items">0</span> members
             </div>
             <div class="pagination-buttons" id="pagination-buttons"></div>
           </div>
@@ -653,7 +927,7 @@
   </div>
 </div>
 
-<!-- Add/Edit Modal -->
+<!-- ─── Add / Edit Modal ─── -->
 <div id="team-modal" class="ial-modal" aria-hidden="true">
   <div class="ial-modal__sheet">
     <div class="ial-modal__header">
@@ -681,7 +955,6 @@
                 <option value="coordinator">Coordinator</option>
                 <option value="ambassador">Ambassador</option>
                 <option value="member" selected>Team Member</option>
-                
               </select>
             </div>
             <div class="field">
@@ -690,24 +963,35 @@
             </div>
             <div class="field">
               <label><i data-lucide="image"></i> Photo</label>
-              <input type="text" id="modal-team-image" placeholder="Image URL">
+              <input type="text" id="modal-team-image" placeholder="Image URL or upload below">
               <button type="button" class="btn-upload" id="modal-team-upload-btn">
-                <i data-lucide="upload"></i> Upload
+                <i data-lucide="upload"></i> Upload photo
               </button>
               <input type="file" id="modal-team-file" hidden accept="image/*">
               <div id="modal-team-preview" class="img-preview"></div>
             </div>
+
+            <!-- Toggle Switch -->
             <div class="field">
-              <label class="checkbox-row">
-                <input type="checkbox" id="modal-team-active" checked>
-                <i data-lucide="eye"></i> Show on public site
+              <label><i data-lucide="eye"></i> Visibility</label>
+              <label class="toggle-switch-row" for="modal-team-active">
+                <div class="toggle-switch">
+                  <input type="checkbox" id="modal-team-active" checked>
+                  <span class="toggle-slider"></span>
+                </div>
+                <div>
+                  <div class="toggle-label-text" id="toggle-label-text">Visible on public site</div>
+                  <div class="toggle-label-sub" id="toggle-label-sub">Members can see this person</div>
+                </div>
               </label>
             </div>
           </div>
+
           <div class="field">
             <label><i data-lucide="align-left"></i> Bio</label>
             <textarea id="modal-team-bio" rows="3" placeholder="Short biography..."></textarea>
           </div>
+
           <div class="form-cols-2">
             <div class="field">
               <label><i data-lucide="mail"></i> Email</label>
@@ -719,6 +1003,7 @@
             </div>
           </div>
         </div>
+
         <div class="ial-modal__actions">
           <button type="submit" class="btn btn-save"><i data-lucide="save"></i> Save Member</button>
           <button type="button" class="btn btn-cancel modal-dismiss"><i data-lucide="x"></i> Cancel</button>
@@ -728,14 +1013,14 @@
   </div>
 </div>
 
-<!-- View Modal -->
+<!-- ─── View Modal ─── -->
 <div id="view-team-modal" class="ial-modal" aria-hidden="true">
   <div class="ial-modal__sheet">
     <div class="ial-modal__header">
       <h3 class="ial-modal__title"><i data-lucide="user"></i> Team Member Details</h3>
       <button class="ial-modal__close view-modal-dismiss"><i data-lucide="x"></i></button>
     </div>
-    <div class="ial-modal__body view-mode">
+    <div class="ial-modal__body">
       <div id="view-team-content"></div>
       <div class="ial-modal__actions">
         <button type="button" class="btn btn-cancel view-modal-dismiss">Close</button>
@@ -744,7 +1029,25 @@
   </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
+<!-- ─── Toggle Confirm Modal ─── -->
+<div id="toggle-confirm-modal" class="ial-modal" aria-hidden="true">
+  <div class="ial-modal__sheet" style="max-width: 440px;">
+    <div class="ial-modal__header">
+      <h3 class="ial-modal__title" id="toggle-modal-title"><i data-lucide="eye"></i> Confirm Visibility Change</h3>
+      <button class="ial-modal__close toggle-modal-dismiss"><i data-lucide="x"></i></button>
+    </div>
+    <div class="ial-modal__body">
+      <p id="toggle-modal-desc">Are you sure you want to change this member's visibility?</p>
+      <div class="toggle-confirm-info" id="toggle-confirm-info"></div>
+      <div class="ial-modal__actions">
+        <button type="button" class="btn" id="confirm-toggle-btn"><i data-lucide="check"></i> Confirm</button>
+        <button type="button" class="btn btn-cancel toggle-modal-dismiss"><i data-lucide="x"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Delete Confirm Modal ─── -->
 <div id="delete-confirm-modal" class="ial-modal" aria-hidden="true">
   <div class="ial-modal__sheet" style="max-width: 400px;">
     <div class="ial-modal__header">
@@ -753,8 +1056,8 @@
     </div>
     <div class="ial-modal__body">
       <p>Are you sure you want to delete this team member?</p>
-      <p class="warning-text" style="color: #dc2626; margin: 1rem 0;"><strong>⚠️ This action cannot be undone!</strong></p>
-      <div id="delete-item-info" style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; margin: 1rem 0;"></div>
+      <p style="color:#dc2626; margin:1rem 0;"><strong>⚠️ This action cannot be undone!</strong></p>
+      <div id="delete-item-info" style="background:#f8fafc; padding:0.75rem; border-radius:8px; margin:1rem 0; border:1px solid #eef2f8;"></div>
       <div class="ial-modal__actions">
         <button type="button" class="btn btn-danger" id="confirm-delete-btn"><i data-lucide="trash-2"></i> Delete Permanently</button>
         <button type="button" class="btn btn-cancel delete-modal-dismiss">Cancel</button>
@@ -766,502 +1069,596 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/admin-sidebar.js"></script>
 <script>
-  (function() {
-    const SUPABASE_URL = 'https://wxcybeaafimxjhbhblzg.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
-    const ITEMS_PER_PAGE = 10;
-    
-    let supabase = null;
-    let pendingDeleteId = null;
-    let pendingDeleteName = null;
-    let allTeamMembers = [];
-    let currentPage = 1;
-    let totalPages = 1;
-    
-    const container = document.getElementById('team-list');
-    const modal = document.getElementById('team-modal');
-    const viewModal = document.getElementById('view-team-modal');
-    const deleteConfirmModal = document.getElementById('delete-confirm-modal');
-    const viewContent = document.getElementById('view-team-content');
-    const deleteItemInfo = document.getElementById('delete-item-info');
-    const modalTitle = document.getElementById('team-modal-title');
-    const form = document.getElementById('team-modal-form');
-    const memberIdInput = document.getElementById('modal-team-id');
-    const nameInput = document.getElementById('modal-team-name');
-    const positionInput = document.getElementById('modal-team-position');
-    const roleSelect = document.getElementById('modal-team-role');
-    const orderInput = document.getElementById('modal-team-order');
-    const imageInput = document.getElementById('modal-team-image');
-    const bioInput = document.getElementById('modal-team-bio');
-    const emailInput = document.getElementById('modal-team-email');
-    const linkedinInput = document.getElementById('modal-team-linkedin');
-    const activeCheck = document.getElementById('modal-team-active');
-    const fileUpload = document.getElementById('modal-team-file');
-    const previewDiv = document.getElementById('modal-team-preview');
-    const msgSpan = document.getElementById('team-msg');
-    const statusSpan = document.getElementById('connection-status');
-    const paginationContainer = document.getElementById('pagination-container');
-    const paginationButtons = document.getElementById('pagination-buttons');
-    
-    function refreshIcons() {
-      if (typeof lucide !== 'undefined') lucide.createIcons();
+(function () {
+  const SUPABASE_URL     = 'https://wxcybeaafimxjhbhblzg.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_G2zg5FlD1oPbM19KQggcqw_04xXEnfR';
+  const ITEMS_PER_PAGE   = 10;
+
+  let supabase          = null;
+  let pendingDeleteId   = null;
+  let pendingDeleteName = null;
+  let pendingToggleId   = null;
+  let pendingToggleActive = null;
+  let allTeamMembers    = [];
+  let filteredMembers   = [];
+  let currentPage       = 1;
+  let totalPages        = 1;
+  let currentFilter     = 'all';
+
+  /* ── DOM refs ── */
+  const container           = document.getElementById('team-list');
+  const modal               = document.getElementById('team-modal');
+  const viewModal           = document.getElementById('view-team-modal');
+  const toggleConfirmModal  = document.getElementById('toggle-confirm-modal');
+  const deleteConfirmModal  = document.getElementById('delete-confirm-modal');
+  const viewContent         = document.getElementById('view-team-content');
+  const deleteItemInfo      = document.getElementById('delete-item-info');
+  const modalTitle          = document.getElementById('team-modal-title');
+  const form                = document.getElementById('team-modal-form');
+  const memberIdInput       = document.getElementById('modal-team-id');
+  const nameInput           = document.getElementById('modal-team-name');
+  const positionInput       = document.getElementById('modal-team-position');
+  const roleSelect          = document.getElementById('modal-team-role');
+  const orderInput          = document.getElementById('modal-team-order');
+  const imageInput          = document.getElementById('modal-team-image');
+  const bioInput            = document.getElementById('modal-team-bio');
+  const emailInput          = document.getElementById('modal-team-email');
+  const linkedinInput       = document.getElementById('modal-team-linkedin');
+  const activeCheck         = document.getElementById('modal-team-active');
+  const toggleLabelText     = document.getElementById('toggle-label-text');
+  const toggleLabelSub      = document.getElementById('toggle-label-sub');
+  const fileUpload          = document.getElementById('modal-team-file');
+  const previewDiv          = document.getElementById('modal-team-preview');
+  const msgSpan             = document.getElementById('team-msg');
+  const statusSpan          = document.getElementById('connection-status');
+  const paginationContainer = document.getElementById('pagination-container');
+  const paginationButtons   = document.getElementById('pagination-buttons');
+
+  /* ── Helpers ── */
+  function refreshIcons () {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+
+  function escapeHtml (str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>]/g, m =>
+      m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'
+    );
+  }
+
+  function isActive (member) {
+    return member.is_active !== false && member.is_active !== null
+      ? true
+      : member.is_active === true;
+    // Simplified: treat null as active (backward compat), false as inactive
+  }
+  // Cleaner version:
+  function memberIsActive (member) {
+    return member.is_active !== false;   // null → active, true → active, false → inactive
+  }
+
+  function showMessage (msg, isError = false) {
+    if (!msgSpan) return;
+    const icon = isError ? 'alert-circle' : 'check-circle';
+    msgSpan.innerHTML = `<i data-lucide="${icon}"></i> ${msg}`;
+    msgSpan.className = isError ? 'save-msg error' : 'save-msg';
+    refreshIcons();
+    setTimeout(() => { if (msgSpan) msgSpan.innerHTML = ''; }, 4000);
+  }
+
+  function updateConnectionStatus (connected, message = '') {
+    if (!statusSpan) return;
+    if (connected) {
+      statusSpan.innerHTML = '<i data-lucide="wifi"></i> Connected';
+      statusSpan.className = 'status-dot';
+    } else {
+      statusSpan.innerHTML = `<i data-lucide="wifi-off"></i> ${message || 'Disconnected'}`;
+      statusSpan.className = 'status-dot error';
     }
-    
-    function showMessage(msg, isError = false) {
-      if (msgSpan) {
-        msgSpan.innerHTML = isError ? `<i data-lucide="alert-circle"></i> ${msg}` : `<i data-lucide="check-circle"></i> ${msg}`;
-        msgSpan.className = isError ? 'save-msg error' : 'save-msg';
-        setTimeout(() => { if(msgSpan) msgSpan.innerHTML = ''; }, 4000);
-        refreshIcons();
-      }
+    refreshIcons();
+  }
+
+  function getRoleBadge (role) {
+    return { president:'President', founder:'Founder', coordinator:'Coordinator',
+             member:'Team Member', ambassador:'Ambassador' }[role] || role || 'Team Member';
+  }
+
+  /* ── Toggle label update in modal ── */
+  activeCheck?.addEventListener('change', () => {
+    if (activeCheck.checked) {
+      toggleLabelText.textContent = 'Visible on public site';
+      toggleLabelSub.textContent  = 'This member appears on the website';
+    } else {
+      toggleLabelText.textContent = 'Hidden from public site';
+      toggleLabelSub.textContent  = 'This member will not appear on the website';
     }
-    
-    function updateConnectionStatus(connected, message = '') {
-      if (statusSpan) {
-        if (connected) {
-          statusSpan.innerHTML = '<i data-lucide="wifi"></i> Connected';
-          statusSpan.className = 'status-dot';
-        } else {
-          statusSpan.innerHTML = `<i data-lucide="wifi-off"></i> ${message || 'Disconnected'}`;
-          statusSpan.className = 'status-dot error';
-        }
-        refreshIcons();
-      }
+  });
+
+  /* ── Filter tabs ── */
+  function updateCounts () {
+    const total    = allTeamMembers.length;
+    const active   = allTeamMembers.filter(m => memberIsActive(m)).length;
+    const inactive = total - active;
+    document.getElementById('count-all').textContent     = total;
+    document.getElementById('count-active').textContent  = active;
+    document.getElementById('count-inactive').textContent = inactive;
+  }
+
+  function applyFilter (filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    if (filter === 'active') {
+      filteredMembers = allTeamMembers.filter(m => memberIsActive(m));
+    } else if (filter === 'inactive') {
+      filteredMembers = allTeamMembers.filter(m => !memberIsActive(m));
+    } else {
+      filteredMembers = [...allTeamMembers];
     }
-    
-    function renderPagination() {
-      if (!allTeamMembers.length) {
-        paginationContainer.style.display = 'none';
-        return;
-      }
-      
-      paginationContainer.style.display = 'flex';
-      const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
-      const end = Math.min(currentPage * ITEMS_PER_PAGE, allTeamMembers.length);
-      document.getElementById('showing-start').textContent = start;
-      document.getElementById('showing-end').textContent = end;
-      document.getElementById('total-items').textContent = allTeamMembers.length;
-      
-      let buttonsHtml = '';
-      buttonsHtml += `<button class="page-btn" id="prev-page" ${currentPage === 1 ? 'disabled' : ''}><i data-lucide="chevron-left"></i></button>`;
-      
-      const maxVisible = 5;
-      let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-      let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-      if (endPage - startPage + 1 < maxVisible) {
-        startPage = Math.max(1, endPage - maxVisible + 1);
-      }
-      
-      for (let i = startPage; i <= endPage; i++) {
-        buttonsHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
-      }
-      
-      buttonsHtml += `<button class="page-btn" id="next-page" ${currentPage === totalPages ? 'disabled' : ''}><i data-lucide="chevron-right"></i></button>`;
-      
-      paginationButtons.innerHTML = buttonsHtml;
+    currentPage  = 1;
+    totalPages   = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE) || 1;
+    goToPage(1);
+  }
+
+  document.querySelectorAll('.filter-tab').forEach(btn => {
+    btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
+  });
+
+  /* ── Pagination ── */
+  function renderPagination () {
+    if (!filteredMembers.length) {
+      paginationContainer.style.display = 'none';
+      return;
+    }
+    paginationContainer.style.display = 'flex';
+    const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+    const end   = Math.min(currentPage * ITEMS_PER_PAGE, filteredMembers.length);
+    document.getElementById('showing-start').textContent = start;
+    document.getElementById('showing-end').textContent   = end;
+    document.getElementById('total-items').textContent   = filteredMembers.length;
+
+    const maxVisible = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let endPage   = Math.min(totalPages, startPage + maxVisible - 1);
+    if (endPage - startPage + 1 < maxVisible) startPage = Math.max(1, endPage - maxVisible + 1);
+
+    let html = `<button class="page-btn" id="prev-page" ${currentPage === 1 ? 'disabled' : ''}><i data-lucide="chevron-left"></i></button>`;
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+    }
+    html += `<button class="page-btn" id="next-page" ${currentPage === totalPages ? 'disabled' : ''}><i data-lucide="chevron-right"></i></button>`;
+    paginationButtons.innerHTML = html;
+    refreshIcons();
+
+    document.getElementById('prev-page')?.addEventListener('click', () => { if (currentPage > 1) goToPage(currentPage - 1); });
+    document.getElementById('next-page')?.addEventListener('click', () => { if (currentPage < totalPages) goToPage(currentPage + 1); });
+    document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+      btn.addEventListener('click', () => goToPage(parseInt(btn.dataset.page)));
+    });
+  }
+
+  function goToPage (page) {
+    currentPage   = page;
+    const start   = (page - 1) * ITEMS_PER_PAGE;
+    const pageData = filteredMembers.slice(start, start + ITEMS_PER_PAGE);
+    renderTeamMembers(pageData);
+    renderPagination();
+  }
+
+  /* ── Render list ── */
+  function renderTeamMembers (members) {
+    if (!members.length) {
+      const msgs = { all: 'No team members yet. Click "Add member" to get started.',
+                     active: 'No active members. Activate a member using the toggle.',
+                     inactive: 'No inactive members.' };
+      container.innerHTML = `<div class="empty-state"><i data-lucide="users"></i><p>${msgs[currentFilter] || msgs.all}</p></div>`;
       refreshIcons();
-      
-      document.getElementById('prev-page')?.addEventListener('click', () => {
-        if (currentPage > 1) goToPage(currentPage - 1);
-      });
-      document.getElementById('next-page')?.addEventListener('click', () => {
-        if (currentPage < totalPages) goToPage(currentPage + 1);
-      });
-      document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
-        btn.addEventListener('click', () => goToPage(parseInt(btn.dataset.page)));
-      });
+      return;
     }
-    
-    function goToPage(page) {
-      currentPage = page;
-      const start = (currentPage - 1) * ITEMS_PER_PAGE;
-      const end = start + ITEMS_PER_PAGE;
-      const pageData = allTeamMembers.slice(start, end);
-      renderTeamMembers(pageData);
-      renderPagination();
-    }
-    
-    function getRoleBadge(role) {
-      const roleLabels = {
-        'president': 'President',
-        'founder': 'Founder',
-        'coordinator': 'Coordinator',
-        'member': 'Team Member',
-        'ambassador': 'Ambassador'
-      };
-      return roleLabels[role] || role || 'Team Member';
-    }
-    
-    function escapeHtml(str) { 
-      if (!str) return ''; 
-      return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-      });
-    }
-    
-    function renderTeamMembers(members) {
-      if (!members.length) {
-        container.innerHTML = '<div class="empty-state"><i data-lucide="users"></i><p>No team members found.</p></div>';
-        refreshIcons();
-        return;
-      }
-      
-      container.innerHTML = `<div class="team-grid">${members.map(member => `
-        <div class="team-item" data-id="${member.id}">
+
+    container.innerHTML = members.map(member => {
+      const active = memberIsActive(member);
+      const avatarHtml = member.image_path
+        ? `<img src="${escapeHtml(String(member.image_path))}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;"
+             onerror="this.replaceWith(Object.assign(document.createElement('i'),{className:'ti ti-user',style:'font-size:1.5rem'}))">`
+        : '<i data-lucide="user"></i>';
+
+      const statusBadge = active
+        ? `<span class="badge-active"><i data-lucide="eye" style="width:10px;height:10px;"></i> active</span>`
+        : `<span class="badge-inactive"><i data-lucide="eye-off" style="width:10px;height:10px;"></i> inactive</span>`;
+
+      const toggleBtn = active
+        ? `<button class="icon-btn toggle-btn-deactivate" data-id="${member.id}" data-name="${escapeHtml(String(member.name))}" data-active="true" title="Deactivate (hide from site)">
+             <i data-lucide="eye-off"></i> <span>Deactivate</span>
+           </button>`
+        : `<button class="icon-btn toggle-btn-activate" data-id="${member.id}" data-name="${escapeHtml(String(member.name))}" data-active="false" title="Activate (show on site)">
+             <i data-lucide="eye"></i> <span>Activate</span>
+           </button>`;
+
+      return `
+        <div class="team-item ${active ? '' : 'is-inactive'}" data-id="${member.id}">
           <div class="team-info">
-            <div class="team-avatar">
-              ${member.image_path ? `<img src="${escapeHtml(String(member.image_path))}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22 viewBox=%220 0 24 24%22 fill=%22%238a99b0%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E'">` : '<i data-lucide="user"></i>'}
-            </div>
+            <div class="team-avatar">${avatarHtml}</div>
             <div class="team-details">
               <div class="team-name">
                 <span>${escapeHtml(String(member.name || ''))}</span>
-                ${member.is_active !== false ? '<span class="badge-active">active</span>' : '<span class="badge-inactive">inactive</span>'}
+                ${statusBadge}
                 <span class="team-role">${getRoleBadge(member.role)}</span>
-                <span style="font-size:0.7rem; background:#f0f2f5; padding:0.1rem 0.5rem; border-radius:20px;">order: ${member.display_order || 0}</span>
+                <span class="order-badge">order: ${member.display_order ?? 0}</span>
               </div>
               <div class="team-position">${escapeHtml(String(member.position || '')) || '—'}</div>
             </div>
           </div>
           <div class="team-actions">
-            <button class="icon-btn view-btn" data-id="${member.id}" data-name="${escapeHtml(String(member.name))}" title="View details">
-              <i data-lucide="eye"></i> View
-            </button>
-            <button class="icon-btn edit-btn" data-id="${member.id}" title="Edit">
-              <i data-lucide="edit-2"></i> Edit
-            </button>
-            <button class="icon-btn delete-btn" data-id="${member.id}" data-name="${escapeHtml(String(member.name))}" title="Delete">
-              <i data-lucide="trash-2"></i> Delete
-            </button>
+            <button class="icon-btn view-btn"   data-id="${member.id}" title="View details"><i data-lucide="eye"></i> <span>View</span></button>
+            <button class="icon-btn edit-btn"   data-id="${member.id}" title="Edit"><i data-lucide="edit-2"></i> <span>Edit</span></button>
+            ${toggleBtn}
+            <button class="icon-btn delete-btn" data-id="${member.id}" data-name="${escapeHtml(String(member.name))}" title="Delete"><i data-lucide="trash-2"></i> <span>Delete</span></button>
           </div>
-        </div>
-      `).join('')}</div>`;
-      refreshIcons();
-      
-      document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const member = allTeamMembers.find(m => m.id === id);
-          if (member) openViewModal(member);
-        });
+        </div>`;
+    }).join('');
+
+    refreshIcons();
+
+    /* Bind actions */
+    container.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const m = allTeamMembers.find(x => x.id === btn.dataset.id);
+        if (m) openViewModal(m);
       });
-      
-      document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const member = allTeamMembers.find(m => m.id === id);
-          if (member) openEditModal(member);
-        });
+    });
+    container.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const m = allTeamMembers.find(x => x.id === btn.dataset.id);
+        if (m) openEditModal(m);
       });
-      
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const name = btn.getAttribute('data-name');
-          openDeleteConfirm(id, name);
-        });
+    });
+    container.querySelectorAll('.toggle-btn-activate, .toggle-btn-deactivate').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id          = btn.dataset.id;
+        const name        = btn.dataset.name;
+        const currentlyActive = btn.dataset.active === 'true';
+        const member = allTeamMembers.find(x => x.id === id);
+        openToggleConfirm(id, name, currentlyActive, member?.image_path || null);
       });
+    });
+    container.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => openDeleteConfirm(btn.dataset.id, btn.dataset.name));
+    });
+  }
+
+  /* ── Toggle confirm modal ── */
+  function openToggleConfirm (id, name, currentlyActive, imagePath) {
+    pendingToggleId     = id;
+    pendingToggleActive = currentlyActive;
+
+    const action = currentlyActive ? 'deactivate' : 'activate';
+    const titleEl = document.getElementById('toggle-modal-title');
+    const descEl  = document.getElementById('toggle-modal-desc');
+    const confirmBtn = document.getElementById('confirm-toggle-btn');
+    const infoEl  = document.getElementById('toggle-confirm-info');
+
+    titleEl.innerHTML = currentlyActive
+      ? '<i data-lucide="eye-off"></i> Deactivate Member'
+      : '<i data-lucide="eye"></i> Activate Member';
+
+    descEl.textContent = currentlyActive
+      ? `This will hide "${name}" from the public website. You can re-activate them anytime.`
+      : `This will make "${name}" visible on the public website.`;
+
+    const avatarHtml = imagePath
+      ? `<img src="${escapeHtml(imagePath)}" alt="${escapeHtml(name)}">`
+      : `<i data-lucide="user"></i>`;
+
+    infoEl.innerHTML = `
+      <div class="toggle-confirm-avatar">${avatarHtml}</div>
+      <div class="toggle-confirm-details">
+        <strong>${escapeHtml(name)}</strong>
+        <span>Will be <strong>${action}d</strong> on the public site</span>
+      </div>`;
+
+    confirmBtn.className = `btn ${currentlyActive ? 'btn-deactivate' : 'btn-activate'}`;
+    confirmBtn.innerHTML = currentlyActive
+      ? '<i data-lucide="eye-off"></i> Yes, Deactivate'
+      : '<i data-lucide="eye"></i> Yes, Activate';
+
+    toggleConfirmModal.setAttribute('aria-hidden', 'false');
+    toggleConfirmModal.style.display = 'flex';
+    refreshIcons();
+  }
+
+  async function confirmToggle () {
+    if (!pendingToggleId || !supabase) return;
+
+    const newActive = !pendingToggleActive;
+    const confirmBtn = document.getElementById('confirm-toggle-btn');
+    if (confirmBtn) { confirmBtn.disabled = true; confirmBtn.innerHTML = '<i data-lucide="loader"></i> Saving...'; refreshIcons(); }
+
+    try {
+      const { error } = await supabase
+        .from('team_members')
+        .update({ is_active: newActive, updated_at: new Date().toISOString() })
+        .eq('id', pendingToggleId);
+
+      if (error) throw error;
+
+      showMessage(`✓ Member ${newActive ? 'activated — now visible on site' : 'deactivated — hidden from site'}`, false);
+      closeAllModals();
+      await fetchTeamMembers();
+    } catch (err) {
+      showMessage(`✗ Failed: ${err.message}`, true);
+    } finally {
+      if (confirmBtn) { confirmBtn.disabled = false; }
+      pendingToggleId = null;
     }
-    
-    function openViewModal(member) {
-      const avatarHtml = member.image_path ? 
-        `<div class="avatar-view"><img src="${escapeHtml(String(member.image_path))}" alt="${escapeHtml(String(member.name))}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22%238a99b0%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E'"></div>` : 
-        '<div class="avatar-view" style="display:flex;align-items:center;justify-content:center;background:#f0f2f5;"><i data-lucide="user" size="48"></i></div>';
-      
-      viewContent.innerHTML = `
-        <div style="text-align:center; margin-bottom:1.5rem;">
-          ${avatarHtml}
-          <h3 style="margin-top:0.5rem;">${escapeHtml(String(member.name))}</h3>
-          <p style="color:#4a5b79;">${escapeHtml(String(member.position)) || '—'}</p>
+  }
+
+  /* ── View modal ── */
+  function openViewModal (member) {
+    const active = memberIsActive(member);
+    const avatarHtml = member.image_path
+      ? `<img src="${escapeHtml(String(member.image_path))}" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid #eef2f8;" alt="${escapeHtml(String(member.name))}">`
+      : `<div style="width:96px;height:96px;border-radius:50%;background:#eef2f8;display:flex;align-items:center;justify-content:center;"><i data-lucide="user" style="width:48px;height:48px;color:#94a3b8;"></i></div>`;
+
+    viewContent.innerHTML = `
+      <div style="text-align:center; margin-bottom:1.5rem;">
+        ${avatarHtml}
+        <h3 style="margin-top:0.75rem; font-size:1.2rem; color:#1e3a5f;">${escapeHtml(String(member.name))}</h3>
+        <p style="color:#6c7a91; margin-top:0.25rem;">${escapeHtml(String(member.position || '')) || '—'}</p>
+        <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
           <span class="team-role">${getRoleBadge(member.role)}</span>
-          ${member.is_active !== false ? '<span class="badge-active" style="margin-left:0.5rem;">active</span>' : '<span class="badge-inactive" style="margin-left:0.5rem;">inactive</span>'}
+          ${active
+            ? '<span class="badge-active"><i data-lucide="eye" style="width:10px;height:10px;"></i> active</span>'
+            : '<span class="badge-inactive"><i data-lucide="eye-off" style="width:10px;height:10px;"></i> inactive</span>'}
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:1rem;">
+        <label><i data-lucide="align-left"></i> Bio</label>
+        <div class="field-value">${member.bio ? escapeHtml(String(member.bio)).replace(/\n/g,'<br>') : '—'}</div>
+      </div>
+      <div class="form-cols-2">
+        <div class="field">
+          <label><i data-lucide="mail"></i> Email</label>
+          <div class="field-value">${member.email ? `<a href="mailto:${escapeHtml(String(member.email))}" style="color:#1e3a5f;">${escapeHtml(String(member.email))}</a>` : '—'}</div>
         </div>
         <div class="field">
-          <label><i data-lucide="align-left"></i> Bio</label>
-          <div class="field-value">${member.bio ? escapeHtml(String(member.bio)).replace(/\n/g, '<br>') : '—'}</div>
+          <label><i data-lucide="linkedin"></i> LinkedIn</label>
+          <div class="field-value">${member.linkedin_url ? `<a href="${escapeHtml(String(member.linkedin_url))}" target="_blank" style="color:#1e3a5f;">View Profile ↗</a>` : '—'}</div>
         </div>
-        <div class="form-cols-2">
-          <div class="field">
-            <label><i data-lucide="mail"></i> Email</label>
-            <div class="field-value">${member.email ? `<a href="mailto:${escapeHtml(String(member.email))}">${escapeHtml(String(member.email))}</a>` : '—'}</div>
-          </div>
-          <div class="field">
-            <label><i data-lucide="linkedin"></i> LinkedIn</label>
-            <div class="field-value">${member.linkedin_url ? `<a href="${escapeHtml(String(member.linkedin_url))}" target="_blank">View Profile</a>` : '—'}</div>
-          </div>
+      </div>
+      <hr style="margin:1rem 0; border:none; border-top:1px solid #eef2f8;">
+      <div class="form-cols-2">
+        <div class="field">
+          <label><i data-lucide="list-ordered"></i> Display Order</label>
+          <div class="field-value">${member.display_order ?? 0}</div>
         </div>
-        <div class="form-cols-2">
-          <div class="field">
-            <label><i data-lucide="list-ordered"></i> Display Order</label>
-            <div class="field-value">${member.display_order ?? 0}</div>
-          </div>
-          <div class="field">
-            <label><i data-lucide="tag"></i> Role Type</label>
-            <div class="field-value">${getRoleBadge(member.role)}</div>
-          </div>
+        <div class="field">
+          <label><i data-lucide="tag"></i> Role Type</label>
+          <div class="field-value">${getRoleBadge(member.role)}</div>
         </div>
-        <hr>
-        <div class="form-cols-2">
-          <div class="field">
-            <label><i data-lucide="calendar"></i> Created</label>
-            <div class="field-value"><small>${member.created_at ? new Date(member.created_at).toLocaleString() : '—'}</small></div>
-          </div>
-          <div class="field">
-            <label><i data-lucide="clock"></i> Last Updated</label>
-            <div class="field-value"><small>${member.updated_at ? new Date(member.updated_at).toLocaleString() : '—'}</small></div>
-          </div>
+      </div>
+      <hr style="margin:1rem 0; border:none; border-top:1px solid #eef2f8;">
+      <div class="form-cols-2">
+        <div class="field">
+          <label><i data-lucide="calendar"></i> Created</label>
+          <div class="field-value" style="font-size:0.8rem;">${member.created_at ? new Date(member.created_at).toLocaleString() : '—'}</div>
         </div>
-      `;
-      refreshIcons();
-      viewModal.setAttribute('aria-hidden', 'false');
-      viewModal.style.display = 'flex';
-    }
-    
-    function openEditModal(member) {
-      memberIdInput.value = member.id || '';
-      nameInput.value = member.name || '';
-      positionInput.value = member.position || '';
-      roleSelect.value = member.role || 'member';
-      orderInput.value = member.display_order ?? 0;
-      imageInput.value = member.image_path || '';
-      bioInput.value = member.bio || '';
-      emailInput.value = member.email || '';
-      linkedinInput.value = member.linkedin_url || '';
-      activeCheck.checked = member.is_active !== false;
-      
-      if (member.image_path && previewDiv) {
-        previewDiv.innerHTML = `<img src="${escapeHtml(String(member.image_path))}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
-      } else {
-        previewDiv.innerHTML = '';
-      }
-      
-      modalTitle.innerHTML = '<i data-lucide="edit-2"></i> Edit Team Member';
-      modal.setAttribute('aria-hidden', 'false');
-      modal.style.display = 'flex';
-      refreshIcons();
-    }
-    
-    function openDeleteConfirm(id, name) {
-      pendingDeleteId = id;
-      pendingDeleteName = name;
-      deleteItemInfo.innerHTML = `<strong>${escapeHtml(String(name))}</strong><br><small>ID: ${id}</small>`;
-      deleteConfirmModal.setAttribute('aria-hidden', 'false');
-      deleteConfirmModal.style.display = 'flex';
-    }
-    
-    async function confirmDelete() {
-      if (!pendingDeleteId) return;
-      if (!supabase) { showMessage('Database not connected', true); return; }
-      
-      showMessage('Deleting team member...', false);
-      
-      try {
-        const { error } = await supabase.from('team_members').delete().eq('id', pendingDeleteId);
-        if (error) throw error;
-        
-        showMessage(`✓ Successfully deleted "${pendingDeleteName}"`, false);
-        deleteConfirmModal.setAttribute('aria-hidden', 'true');
-        deleteConfirmModal.style.display = 'none';
-        pendingDeleteId = null;
-        await fetchTeamMembers();
-      } catch(err) {
-        showMessage(`✗ Delete failed: ${err.message}`, true);
-      }
-    }
-    
-    function resetModal() {
-      form.reset();
-      memberIdInput.value = '';
-      nameInput.value = '';
-      positionInput.value = '';
-      roleSelect.value = 'member';
-      orderInput.value = '0';
-      imageInput.value = '';
-      bioInput.value = '';
-      emailInput.value = '';
-      linkedinInput.value = '';
-      activeCheck.checked = true;
+        <div class="field">
+          <label><i data-lucide="clock"></i> Last Updated</label>
+          <div class="field-value" style="font-size:0.8rem;">${member.updated_at ? new Date(member.updated_at).toLocaleString() : '—'}</div>
+        </div>
+      </div>`;
+
+    refreshIcons();
+    viewModal.setAttribute('aria-hidden', 'false');
+    viewModal.style.display = 'flex';
+  }
+
+  /* ── Edit modal ── */
+  function openEditModal (member) {
+    memberIdInput.value  = member.id || '';
+    nameInput.value      = member.name || '';
+    positionInput.value  = member.position || '';
+    roleSelect.value     = member.role || 'member';
+    orderInput.value     = member.display_order ?? 0;
+    imageInput.value     = member.image_path || '';
+    bioInput.value       = member.bio || '';
+    emailInput.value     = member.email || '';
+    linkedinInput.value  = member.linkedin_url || '';
+    activeCheck.checked  = memberIsActive(member);
+
+    // Update toggle label
+    activeCheck.dispatchEvent(new Event('change'));
+
+    if (member.image_path) {
+      previewDiv.innerHTML = `<img src="${escapeHtml(String(member.image_path))}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
+    } else {
       previewDiv.innerHTML = '';
-      modalTitle.innerHTML = '<i data-lucide="user-plus"></i> Add Team Member';
     }
-    
-    async function fetchTeamMembers() {
-      if (!supabase) return;
-      
-      const { data, error } = await supabase
-        .from('team_members')
-        .select('*')
-        .order('display_order', { ascending: true })
-        .order('created_at', { ascending: false });
-      
+
+    modalTitle.innerHTML = '<i data-lucide="edit-2"></i> Edit Team Member';
+    modal.setAttribute('aria-hidden', 'false');
+    modal.style.display  = 'flex';
+    refreshIcons();
+  }
+
+  /* ── Delete confirm ── */
+  function openDeleteConfirm (id, name) {
+    pendingDeleteId   = id;
+    pendingDeleteName = name;
+    deleteItemInfo.innerHTML = `<strong>${escapeHtml(String(name))}</strong><br><small style="color:#94a3b8;">ID: ${id}</small>`;
+    deleteConfirmModal.setAttribute('aria-hidden', 'false');
+    deleteConfirmModal.style.display = 'flex';
+  }
+
+  async function confirmDelete () {
+    if (!pendingDeleteId || !supabase) { showMessage('Database not connected', true); return; }
+    const btn = document.getElementById('confirm-delete-btn');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i data-lucide="loader"></i> Deleting...'; refreshIcons(); }
+
+    try {
+      const { error } = await supabase.from('team_members').delete().eq('id', pendingDeleteId);
       if (error) throw error;
-      
-      allTeamMembers = data || [];
-      totalPages = Math.ceil(allTeamMembers.length / ITEMS_PER_PAGE);
-      currentPage = 1;
-      
-      if (allTeamMembers.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i data-lucide="users"></i><p>No team members yet. Click "Add member" to get started.</p></div>';
-        paginationContainer.style.display = 'none';
-        refreshIcons();
-        return;
-      }
-      
-      const start = 0;
-      const end = ITEMS_PER_PAGE;
-      const pageData = allTeamMembers.slice(start, end);
-      renderTeamMembers(pageData);
-      renderPagination();
+      showMessage(`✓ Deleted "${pendingDeleteName}"`, false);
+      closeAllModals();
+      await fetchTeamMembers();
+    } catch (err) {
+      showMessage(`✗ Delete failed: ${err.message}`, true);
+    } finally {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="trash-2"></i> Delete Permanently'; refreshIcons(); }
+      pendingDeleteId = null;
     }
-    
-    async function saveTeamMember(payload) {
-      if (!supabase) { showMessage('Supabase not connected', true); return false; }
-      
-      const id = memberIdInput.value;
-      const data = {
-        name: payload.name,
-        position: payload.position,
-        role: payload.role || 'member',
-        bio: payload.bio,
-        image_path: payload.image_path || null,
-        email: payload.email || null,
-        linkedin_url: payload.linkedin_url || null,
-        display_order: payload.display_order ?? 0,
-        is_active: payload.active,
-        updated_at: new Date().toISOString()
-      };
-      
-      try {
-        let result;
-        if (id) {
-          result = await supabase.from('team_members').update(data).eq('id', id);
-        } else {
-          result = await supabase.from('team_members').insert([data]);
-        }
-        
-        if (result.error) throw result.error;
-        showMessage(id ? '✓ Team member updated successfully' : '✓ Team member added successfully', false);
-        resetModal();
-        modal.setAttribute('aria-hidden', 'true');
-        modal.style.display = 'none';
-        await fetchTeamMembers();
-        return true;
-      } catch(err) {
-        showMessage(`✗ Save failed: ${err.message}`, true);
-        return false;
-      }
+  }
+
+  /* ── Close all modals ── */
+  function closeAllModals () {
+    [modal, viewModal, toggleConfirmModal, deleteConfirmModal].forEach(m => {
+      if (m) { m.setAttribute('aria-hidden', 'true'); m.style.display = 'none'; }
+    });
+    resetModal();
+    pendingDeleteId = null;
+    pendingToggleId = null;
+  }
+
+  function resetModal () {
+    form.reset();
+    memberIdInput.value = '';
+    previewDiv.innerHTML = '';
+    activeCheck.checked  = true;
+    activeCheck.dispatchEvent(new Event('change'));
+    modalTitle.innerHTML = '<i data-lucide="user-plus"></i> Add Team Member';
+  }
+
+  /* ── Fetch ── */
+  async function fetchTeamMembers () {
+    if (!supabase) return;
+    const { data, error } = await supabase
+      .from('team_members')
+      .select('*')
+      .order('display_order', { ascending: true, nullsFirst: false })
+      .order('created_at',    { ascending: false });
+
+    if (error) throw error;
+
+    allTeamMembers = data || [];
+    updateCounts();
+    applyFilter(currentFilter);
+  }
+
+  /* ── Save ── */
+  async function saveTeamMember (payload) {
+    if (!supabase) { showMessage('Supabase not connected', true); return false; }
+    const id   = memberIdInput.value;
+    const data = {
+      name:         payload.name,
+      position:     payload.position,
+      role:         payload.role || 'member',
+      bio:          payload.bio || null,
+      image_path:   payload.image_path || null,
+      email:        payload.email || null,
+      linkedin_url: payload.linkedin_url || null,
+      display_order: payload.display_order ?? 0,
+      is_active:    payload.active === true,          // always boolean
+      updated_at:   new Date().toISOString()
+    };
+
+    try {
+      const result = id
+        ? await supabase.from('team_members').update(data).eq('id', id)
+        : await supabase.from('team_members').insert([data]);
+
+      if (result.error) throw result.error;
+      showMessage(id ? '✓ Member updated' : '✓ Member added', false);
+      closeAllModals();
+      await fetchTeamMembers();
+      return true;
+    } catch (err) {
+      showMessage(`✗ Save failed: ${err.message}`, true);
+      return false;
     }
-    
-    // File upload handler
-    if (fileUpload) {
-      fileUpload.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.size > 5 * 1024 * 1024) {
-          showMessage('Image too large (max 5MB)', true);
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          imageInput.value = ev.target.result;
-          if (previewDiv) previewDiv.innerHTML = `<img src="${ev.target.result}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;" />`;
-          refreshIcons();
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-    
-    document.getElementById('modal-team-upload-btn')?.addEventListener('click', () => {
-      fileUpload.click();
+  }
+
+  /* ── Form submit ── */
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!nameInput.value.trim())     { showMessage('Name is required', true);     nameInput.focus();     return; }
+    if (!positionInput.value.trim()) { showMessage('Position is required', true); positionInput.focus(); return; }
+
+    await saveTeamMember({
+      name:          nameInput.value.trim(),
+      position:      positionInput.value.trim(),
+      role:          roleSelect.value,
+      bio:           bioInput.value.trim(),
+      image_path:    imageInput.value.trim(),
+      email:         emailInput.value.trim(),
+      linkedin_url:  linkedinInput.value.trim(),
+      display_order: parseInt(orderInput.value, 10) || 0,
+      active:        activeCheck.checked
     });
-    
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = {
-        name: nameInput.value,
-        position: positionInput.value,
-        role: roleSelect.value,
-        bio: bioInput.value,
-        image_path: imageInput.value,
-        email: emailInput.value,
-        linkedin_url: linkedinInput.value,
-        display_order: parseInt(orderInput.value, 10) || 0,
-        active: activeCheck.checked
-      };
-      
-      if (!formData.name) {
-        showMessage('Name is required', true);
-        nameInput.focus();
-        return;
-      }
-      if (!formData.position) {
-        showMessage('Position is required', true);
-        positionInput.focus();
-        return;
-      }
-      await saveTeamMember(formData);
+  });
+
+  /* ── File upload ── */
+  fileUpload?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showMessage('Image too large (max 5 MB)', true); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      imageInput.value = ev.target.result;
+      previewDiv.innerHTML = `<img src="${ev.target.result}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('modal-team-upload-btn')?.addEventListener('click', () => fileUpload.click());
+
+  /* ── Modal dismiss buttons ── */
+  document.querySelectorAll('.modal-dismiss, .view-modal-dismiss, .toggle-modal-dismiss, .delete-modal-dismiss')
+    .forEach(btn => btn.addEventListener('click', closeAllModals));
+
+  document.getElementById('confirm-delete-btn')?.addEventListener('click', confirmDelete);
+  document.getElementById('confirm-toggle-btn')?.addEventListener('click', confirmToggle);
+
+  document.getElementById('add-team-btn')?.addEventListener('click', () => {
+    resetModal();
+    modal.setAttribute('aria-hidden', 'false');
+    modal.style.display = 'flex';
+    refreshIcons();
+  });
+
+  /* ── Close on backdrop click ── */
+  [modal, viewModal, toggleConfirmModal, deleteConfirmModal].forEach(m => {
+    m?.addEventListener('click', (e) => { if (e.target === m) closeAllModals(); });
+  });
+
+  /* ── Init ── */
+  async function initializeSupabase () {
+    updateConnectionStatus(false, 'Connecting...');
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: false }
     });
-    
-    document.querySelectorAll('.modal-dismiss, .view-modal-dismiss, .delete-modal-dismiss').forEach(btn => {
-      btn.addEventListener('click', () => {
-        modal.setAttribute('aria-hidden', 'true');
-        modal.style.display = 'none';
-        viewModal.setAttribute('aria-hidden', 'true');
-        viewModal.style.display = 'none';
-        deleteConfirmModal.setAttribute('aria-hidden', 'true');
-        deleteConfirmModal.style.display = 'none';
-        resetModal();
-        pendingDeleteId = null;
-      });
-    });
-    
-    document.getElementById('confirm-delete-btn')?.addEventListener('click', confirmDelete);
-    
-    document.getElementById('add-team-btn')?.addEventListener('click', () => {
-      if (!supabase) {
-        showMessage('Reconnecting to database...', false);
-        initializeSupabase();
-        return;
-      }
-      resetModal();
-      modal.setAttribute('aria-hidden', 'false');
-      modal.style.display = 'flex';
+    try {
+      const { error } = await supabase.from('team_members').select('count', { count: 'exact', head: true });
+      if (error && !error.message.includes('does not exist')) throw error;
+      updateConnectionStatus(true);
+      await fetchTeamMembers();
+    } catch (err) {
+      updateConnectionStatus(false, err.message);
+      container.innerHTML = `<div class="empty-state"><i data-lucide="wifi-off"></i><p>Connection error: ${escapeHtml(err.message)}</p></div>`;
       refreshIcons();
-    });
-    
-    async function initializeSupabase() {
-      updateConnectionStatus(false, 'Connecting...');
-      
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: { persistSession: false }
-      });
-      
-      try {
-        const { error } = await supabase.from('team_members').select('count', { count: 'exact', head: true });
-        if (error && !error.message.includes('does not exist')) throw error;
-        
-        updateConnectionStatus(true);
-        await fetchTeamMembers();
-      } catch(err) {
-        updateConnectionStatus(false, err.message);
-        container.innerHTML = `<div class="error-placeholder">Connection error: ${err.message}</div>`;
-      }
     }
-    
-    window.addEventListener('DOMContentLoaded', async () => {
-      const appShell = document.getElementById('app-shell');
-      if (appShell) appShell.classList.remove('app-hidden');
-      
-      if (typeof renderAdminSidebar === 'function') {
-        try { renderAdminSidebar('team'); } catch(e) { console.warn('Sidebar error:', e); }
-      }
-      
-      refreshIcons();
-      await initializeSupabase();
-    });
-  })();
+  }
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('app-shell')?.classList.remove('app-hidden');
+    if (typeof renderAdminSidebar === 'function') {
+      try { renderAdminSidebar('team'); } catch (e) { console.warn('Sidebar:', e); }
+    }
+    refreshIcons();
+    await initializeSupabase();
+  });
+})();
 </script>
 </body>
 </html>
