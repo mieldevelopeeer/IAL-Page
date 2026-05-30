@@ -678,8 +678,9 @@
               <select id="modal-team-role">
                 <option value="president">President</option>
                 <option value="founder">Founder</option>
+                <option value="ambassador">Ambassador</option>
                 <option value="member" selected>Team Member</option>
-                <option value="ambassador" selected>Ambassador</option>
+                
               </select>
             </div>
             <div class="field">
@@ -883,7 +884,7 @@
       const roleLabels = {
         'president': 'President',
         'founder': 'Founder',
-        'member': 'Team Member'
+        'member': 'Team Member',
         'ambassador': 'Ambassador'
       };
       return roleLabels[role] || role || 'Team Member';
