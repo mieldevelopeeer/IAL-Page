@@ -1187,11 +1187,10 @@
         grid.innerHTML = '<div class="loading-placeholder">Loading team members...</div>';
         
         let { data, error } = await db
-            .from('team_members')
-            .select('*')
-            .eq('is_active', true)
-            .order('display_order', { ascending: true });
-
+    .from('team_members')
+    .select('*')
+    .or('is_active.eq.true,is_active.is.null')
+    .order('display_order', { nullsFirst: false, ascending: true });
         if (error || !data || data.length === 0) {
             grid.innerHTML = '<div class="loading-placeholder">No team members found.</div>';
             return;
